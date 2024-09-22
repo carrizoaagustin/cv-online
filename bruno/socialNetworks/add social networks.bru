@@ -1,0 +1,22 @@
+meta {
+  name: add social networks
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/users/:idUser/social-networks/
+  body: json
+  auth: none
+}
+
+params:path {
+  idUser: 
+}
+
+body:json {
+  {
+    "socialNetworkId": 1,
+    "link": "https://github.com/carrizoaagustin"
+  }
+}

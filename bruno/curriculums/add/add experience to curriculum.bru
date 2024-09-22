@@ -1,0 +1,21 @@
+meta {
+  name: add experience to curriculum
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/curriculums/:curriculumId/experiences
+  body: json
+  auth: none
+}
+
+params:path {
+  curriculumId: 
+}
+
+body:json {
+  {
+    "experienceId":"id"
+  }
+}

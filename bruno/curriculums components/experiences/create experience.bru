@@ -1,0 +1,21 @@
+meta {
+  name: create experience
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/experiences/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title":"titulo",
+    "since": "2020-2-2",
+    "until": "2021-2-2",
+    "details": "lorem ipsum",
+    "scopeId": 1
+  }
+}

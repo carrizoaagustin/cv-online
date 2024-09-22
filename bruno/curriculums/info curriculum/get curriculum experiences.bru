@@ -1,0 +1,19 @@
+meta {
+  name: get curriculum experiences
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/curriculums/:curriculumId/experiences
+  body: none
+  auth: none
+}
+
+params:path {
+  curriculumId: 
+}
+
+docs {
+  Debe devolver todas las experiencias del asociadas a ese curriculum
+}

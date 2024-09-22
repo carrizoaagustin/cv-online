@@ -1,0 +1,15 @@
+meta {
+  name: find experience
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/experiences/?title=titulo
+  body: none
+  auth: none
+}
+
+params:query {
+  title: titulo
+}

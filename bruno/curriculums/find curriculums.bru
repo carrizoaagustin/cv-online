@@ -1,0 +1,20 @@
+meta {
+  name: find curriculums
+  type: http
+  seq: 4
+}
+
+get {
+  url: skills{{baseUrl}}/api/curriculums?userId=1&title=buscoTitulo
+  body: none
+  auth: none
+}
+
+params:query {
+  userId: 1
+  title: buscoTitulo
+}
+
+docs {
+  Devuelve el id y el titulo de todos los curriculums de un usuario
+}

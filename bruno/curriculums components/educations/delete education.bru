@@ -1,0 +1,15 @@
+meta {
+  name: delete education
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{baseUrl}}/api/educations/:educationId
+  body: none
+  auth: none
+}
+
+params:path {
+  educationId: 
+}

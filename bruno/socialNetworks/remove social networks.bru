@@ -1,0 +1,16 @@
+meta {
+  name: remove social networks
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{baseUrl}}/api/users/:idUser/social-networks/:userSocialNetworkId
+  body: none
+  auth: none
+}
+
+params:path {
+  userSocialNetworkId: 
+  idUser: 
+}

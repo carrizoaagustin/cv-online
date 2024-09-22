@@ -1,0 +1,22 @@
+meta {
+  name: create curriculum
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/curriculum
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "curriculum title"
+  }
+}
+
+docs {
+  No se deben permitir crear dos curriculums con el mismo titulo por usuario.
+  
+}

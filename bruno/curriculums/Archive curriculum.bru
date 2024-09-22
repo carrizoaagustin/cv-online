@@ -1,0 +1,26 @@
+meta {
+  name: Archive curriculum
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/api/curriculums/:curriculumId
+  body: json
+  auth: none
+}
+
+params:path {
+  curriculumId: 1
+}
+
+body:json {
+  {
+    "archived": true
+  }
+}
+
+docs {
+  archivar un curriculum implica que al consultar sus informacion deberia dar un error el metodo get curriculum.
+  
+}

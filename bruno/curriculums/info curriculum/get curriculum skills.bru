@@ -1,0 +1,15 @@
+meta {
+  name: get curriculum skills
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/curriculums/:curriculumId/skills
+  body: none
+  auth: none
+}
+
+params:path {
+  curriculumId: 
+}

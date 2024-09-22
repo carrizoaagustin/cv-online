@@ -1,0 +1,23 @@
+meta {
+  name: update skills
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/api/skills/:skillId
+  body: json
+  auth: none
+}
+
+params:path {
+  skillId: 
+}
+
+body:json {
+  {
+    "title":"titulo",
+    "type": "T",
+    "scopeId":"id"
+  }
+}

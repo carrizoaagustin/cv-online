@@ -1,0 +1,16 @@
+meta {
+  name: remove experience to curriculum
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/api/curriculums/:curriculumId/experiences/:experienceId
+  body: json
+  auth: none
+}
+
+params:path {
+  experienceId: 
+  curriculumId: 
+}
