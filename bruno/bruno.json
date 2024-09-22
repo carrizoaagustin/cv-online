@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "cv-online",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
