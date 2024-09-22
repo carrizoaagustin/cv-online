@@ -1,0 +1,21 @@
+meta {
+  name: add educations to curriculum
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/curriculums/:curriculumId/educations
+  body: json
+  auth: none
+}
+
+params:path {
+  curriculumId: 
+}
+
+body:json {
+  {
+    "educationId":"id"
+  }
+}

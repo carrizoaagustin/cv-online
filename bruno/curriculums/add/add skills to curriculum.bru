@@ -1,0 +1,21 @@
+meta {
+  name: add skills to curriculum
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/curriculums/:curriculumId/skills
+  body: json
+  auth: none
+}
+
+params:path {
+  curriculumId: 
+}
+
+body:json {
+  {
+    "skillId":"id"
+  }
+}

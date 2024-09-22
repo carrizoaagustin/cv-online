@@ -1,0 +1,25 @@
+meta {
+  name: find scopes
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/scopes?name=nombre del escope&type=tipo del scope
+  body: none
+  auth: none
+}
+
+params:query {
+  name: nombre del escope
+  type: tipo del scope
+}
+
+docs {
+  Los scopes seran temas relacionados a una experiencia o skills. 
+  
+  Tienen tipos para poder diferenciar los scopes de distintos ambitos.
+  
+  El scope computacion puede tener:
+  - Mysql, NodeJs, ETC
+}

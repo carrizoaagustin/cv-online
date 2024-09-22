@@ -1,0 +1,16 @@
+meta {
+  name: remove skills to curriculum
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/api/curriculums/:curriculumId/skills/:skillId
+  body: json
+  auth: none
+}
+
+params:path {
+  skillId: 
+  curriculumId: 
+}

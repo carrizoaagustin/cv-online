@@ -1,0 +1,24 @@
+meta {
+  name: update education
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/api/educations/:educationId
+  body: json
+  auth: none
+}
+
+params:path {
+  educationId: 
+}
+
+body:json {
+  {
+    "title": "titulo",
+    "since": "2000-2-2",
+    "until": "2002-2-2",
+    "resourceId": "id"
+  }
+}

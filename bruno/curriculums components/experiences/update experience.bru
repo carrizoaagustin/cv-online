@@ -1,0 +1,25 @@
+meta {
+  name: update experience
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/api/{{baseUrl}}/api/experiences/:experienceId
+  body: json
+  auth: none
+}
+
+params:path {
+  experienceId: 
+}
+
+body:json {
+  {
+    "title":"titulo",
+    "since": "2020-2-2",
+    "until": "2021-2-2",
+    "details": "lorem ipsum",
+    "scopeId": 1
+  }
+}

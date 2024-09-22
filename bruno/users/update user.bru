@@ -1,0 +1,19 @@
+meta {
+  name: update user
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{baseUrl}}/api/users/:id
+  body: none
+  auth: none
+}
+
+params:path {
+  id: 
+}
+
+docs {
+  Solo puede ser editado por si mismo.
+}

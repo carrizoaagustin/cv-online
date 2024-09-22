@@ -1,0 +1,19 @@
+meta {
+  name: get curriculum
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/curriculum/:curriculumId/
+  body: none
+  auth: none
+}
+
+params:path {
+  curriculumId: 1
+}
+
+docs {
+  debe devolver datos del usuario + redes sociales +languages + datos del curriculum (about me + foto)
+}
