@@ -1,0 +1,5 @@
+# DEVELOPMENT
+
+## INIT SERVER WITHOUT DOCKER
+
+`go run ./cmd/server`
