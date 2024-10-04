@@ -15,4 +15,15 @@ for example: `go get github.com/gin-gonic/gin`
 - Gin gonic
 - goqu
 - google/uuid
-- goolang-migrate (migrations) (install)
+- goose (migrations) (install)
+
+
+## GOOSE
+https://github.com/pressly/goose
+
+### INSTALL
+`go install github.com/pressly/goose/v3/cmd/goose@latest`
+
+### CREATE MIGRATION
+`GOOSE_MIGRATION_DIR=./pkg/dbconnection/migrations goose create <name> sql`
+
