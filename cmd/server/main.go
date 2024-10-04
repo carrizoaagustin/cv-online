@@ -13,7 +13,9 @@ func main() {
 
 	dbconnection.RunMigrations(db)
 
-
+	if(cfg.App.EnvironmentMode == config.ProductionMode){
+		gin.SetMode(gin.ReleaseMode)
+	}
 
 	router := gin.Default()
 	// DELETE THAT
@@ -23,5 +25,5 @@ func main() {
 		})
 	})
 
-	router.Run()
+	router.Run(":" + cfg.App.PORT)
 }
