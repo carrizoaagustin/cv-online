@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/carrizoaagustin/cv-online/config"
 	"github.com/carrizoaagustin/cv-online/pkg/dbconnection"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -12,5 +13,15 @@ func main() {
 
 	dbconnection.RunMigrations(db)
 
-	// run app
+
+
+	router := gin.Default()
+	// DELETE THAT
+	router.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+
+	router.Run()
 }
