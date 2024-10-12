@@ -2,14 +2,13 @@ package config
 
 import "github.com/caarlos0/env/v11"
 
-
 type DatabaseConfig struct {
-	Url string `env:"PSQL_URL"`
+	URL string `env:"PSQL_URL"`
 }
 
 type App struct {
 	EnvironmentMode string `env:"APP_ENVIRONMENT" envDefault:"DEV"` // DEV OR PROD
-	PORT string `env:"APP_PORT" envDefault:"8000"`
+	PORT            string `env:"APP_PORT" envDefault:"8000"`
 }
 
 type config struct {
@@ -19,12 +18,17 @@ type config struct {
 
 const (
 	DevelopmentMode = "DEV"
-	ProductionMode = "PROD"
+	ProductionMode  = "PROD"
 )
 
+// revive:disable:unexported-return
 func LoadConfig() *config {
 	var cfg config
-	env.Parse(&cfg)
-	
+	err := env.Parse(&cfg)
+
+	if err != nil {
+		panic(err)
+	}
+
 	return &cfg
 }

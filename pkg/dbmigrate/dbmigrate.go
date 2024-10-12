@@ -9,14 +9,13 @@ import (
 
 func Up(db *sql.DB, dbDialect string, embedMigrations embed.FS, dir string) {
 	goose.SetBaseFS(embedMigrations)
-	
 
 	if err := goose.SetDialect(dbDialect); err != nil {
-			panic(err)
+		panic(err)
 	}
 
 	if err := goose.Up(db, dir); err != nil {
-			panic(err)
+		panic(err)
 	}
 }
 
@@ -24,10 +23,10 @@ func Down(db *sql.DB, dbDialect string, embedMigrations embed.FS, dir string) {
 	goose.SetBaseFS(embedMigrations)
 
 	if err := goose.SetDialect(dbDialect); err != nil {
-			panic(err)
+		panic(err)
 	}
 
 	if err := goose.Down(db, dir); err != nil {
-			panic(err)
+		panic(err)
 	}
 }
