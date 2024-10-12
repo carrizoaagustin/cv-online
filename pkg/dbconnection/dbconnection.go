@@ -6,8 +6,8 @@ import (
 
 	// Driver psql.
 	_ "github.com/lib/pq"
-
 	"github.com/carrizoaagustin/cv-online/config"
+
 	"github.com/carrizoaagustin/cv-online/pkg/dbmigrate"
 )
 
