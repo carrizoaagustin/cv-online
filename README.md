@@ -27,3 +27,10 @@ https://github.com/pressly/goose
 ### CREATE MIGRATION
 `GOOSE_MIGRATION_DIR=./pkg/dbconnection/migrations goose create <name> sql`
 
+### DOWN
+
+`GOOSE_MIGRATION_DIR=./pkg/dbconnection/migrations GOOSE_DRIVER=postgres GOOSE_DBSTRING="postgres://postgres:root1234@localhost:5432/example?sslmode=disable" goose down`
+
+### UP
+
+`GOOSE_MIGRATION_DIR=./pkg/dbconnection/migrations GOOSE_DRIVER=postgres GOOSE_DBSTRING="postgres://postgres:root1234@localhost:5432/example?sslmode=disable" goose up`
