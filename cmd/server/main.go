@@ -28,9 +28,9 @@ func main() {
 		})
 	})
 
-	router.Run(":" + cfg.App.PORT)
+	err := router.Run(":" + cfg.App.PORT)
 
-	// if err != nil {
-	// 	panic(err)
-	// }
+	if err != nil {
+		panic(err)
+	}
 }
