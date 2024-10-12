@@ -1,0 +1,13 @@
+{
+  "go.lintOnSave": "file",
+  "go.formatTool": "goimports",
+  "go.lintTool": "golangci-lint",
+  "go.lintFlags": ["--fast"],
+  "go.useLanguageServer": true,
+  "[go]": {
+    "editor.defaultFormatter": "golang.go",
+    "editor.formatOnSave": true,
+  },
+  "editor.insertSpaces": false,
+  "editor.renderWhitespace": "all"
+}
