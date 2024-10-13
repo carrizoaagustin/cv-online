@@ -3,6 +3,7 @@ package dbconnection
 import (
 	"database/sql"
 	"embed"
+	"fmt"
 	"log"
 
 	_ "github.com/lib/pq" // PSQL DRIVER.
@@ -37,18 +38,31 @@ func (dbs *DatabaseConnection) Connect() {
 }
 
 func (dbs *DatabaseConnection) CreateSchema() {
-	db, err := sql.Open("postgres", dbs.dbConfig.URL+"?sslmode="+dbs.dbConfig.SSLMode)
+	db, err := sql.Open("postgres", fmt.Sprintf("%s?sslmode=%s", dbs.dbConfig.URL, dbs.dbConfig.SSLMode))
 
 	if err != nil {
 		log.Fatalf("Error DB connection: %v", err)
 	}
 
-	defer db.Close()
+	var exists bool
 
-	_, err = db.Exec("CREATE DATABASE" + dbs.dbConfig.SchemaName)
+	query := `SELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = $1);`
+	err = db.QueryRow(query, dbs.dbConfig.SchemaName).Scan(&exists)
+
 	if err != nil {
-		log.Fatalf("Error creating schema: %v", err)
+		log.Fatalf("Failed to check database existence: %v", err)
 	}
+
+	queryCreateSchema := fmt.Sprintf(`CREATE DATABASE "%s"`, dbs.dbConfig.SchemaName)
+
+	if !exists {
+		_, err = db.Exec(queryCreateSchema)
+		if err != nil {
+			log.Fatalf("Error creating schema: %v", err)
+		}
+	}
+
+	defer db.Close()
 }
 
 func (dbs *DatabaseConnection) Close() {
