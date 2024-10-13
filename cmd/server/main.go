@@ -11,10 +11,16 @@ import (
 
 func main() {
 	cfg := config.LoadConfig()
-	db := dbconnection.ConnectDB(&cfg.DatabaseConfig)
-	defer db.Close()
+	databaseConnection := dbconnection.New(&cfg.DatabaseConfig)
+	databaseConnection.Connect()
+	defer databaseConnection.Close()
 
-	dbconnection.RunMigrations(db)
+	databaseConnection.RunMigrations()
+
+	// INIT OBJECTS
+	// queryBuilder := dbquerybuilder.New(databaseConnection.GetDatabaseConnection())
+
+	// INIT ROUTER
 
 	if cfg.App.EnvironmentMode == config.ProductionMode {
 		gin.SetMode(gin.ReleaseMode)

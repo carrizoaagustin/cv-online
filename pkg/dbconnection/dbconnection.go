@@ -4,8 +4,7 @@ import (
 	"database/sql"
 	"embed"
 
-	// Driver psql.
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // PSQL DRIVER.
 
 	"github.com/carrizoaagustin/cv-online/config"
 	"github.com/carrizoaagustin/cv-online/pkg/dbmigrate"
@@ -14,15 +13,34 @@ import (
 //go:embed migrations/*.sql
 var migrationFiles embed.FS
 
-func ConnectDB(dbConfig *config.DatabaseConfig) *sql.DB {
-	db, err := sql.Open("postgres", dbConfig.URL)
+type DatabaseConnection struct {
+	dbConfig           *config.DatabaseConfig
+	databaseConnection *sql.DB
+}
+
+func New(dbConfig *config.DatabaseConfig) *DatabaseConnection {
+	return &DatabaseConnection{
+		dbConfig: dbConfig,
+	}
+}
+
+func (dbs *DatabaseConnection) Connect() {
+	databaseConnection, err := sql.Open("postgres", dbs.dbConfig.URL)
 	if err != nil {
 		panic(err)
 	}
 
-	return db
+	dbs.databaseConnection = databaseConnection
 }
 
-func RunMigrations(db *sql.DB) {
-	dbmigrate.Up(db, "postgres", migrationFiles, "migrations")
+func (dbs *DatabaseConnection) Close() {
+	dbs.databaseConnection.Close()
+}
+
+func (dbs *DatabaseConnection) RunMigrations() {
+	dbmigrate.Up(dbs.databaseConnection, "postgres", migrationFiles, "migrations")
+}
+
+func (dbs *DatabaseConnection) GetDatabaseConnection() *sql.DB {
+	return dbs.databaseConnection
 }
