@@ -16,7 +16,6 @@ func main() {
 	databaseConnection := dbconnection.New(&cfg.DatabaseConfig)
 	databaseConnection.Connect()
 	defer databaseConnection.Close()
-	
 
 	databaseConnection.RunMigrations()
 
