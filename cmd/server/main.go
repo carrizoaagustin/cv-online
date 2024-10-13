@@ -6,7 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/carrizoaagustin/cv-online/config"
+	resource_repository "github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/repository"
 	"github.com/carrizoaagustin/cv-online/pkg/dbconnection"
+	"github.com/carrizoaagustin/cv-online/pkg/dbquerybuilder"
 )
 
 func main() {
@@ -18,7 +20,8 @@ func main() {
 	databaseConnection.RunMigrations()
 
 	// INIT OBJECTS
-	// queryBuilder := dbquerybuilder.New(databaseConnection.GetDatabaseConnection())
+	queryBuilder := dbquerybuilder.New(databaseConnection.GetDatabaseConnection())
+	resource_repository.NewResourceRepository(queryBuilder)
 
 	// INIT ROUTER
 
