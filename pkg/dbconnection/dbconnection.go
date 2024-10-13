@@ -3,6 +3,7 @@ package dbconnection
 import (
 	"database/sql"
 	"embed"
+	"log"
 
 	_ "github.com/lib/pq" // PSQL DRIVER.
 
@@ -25,12 +26,29 @@ func New(dbConfig *config.DatabaseConfig) *DatabaseConnection {
 }
 
 func (dbs *DatabaseConnection) Connect() {
-	databaseConnection, err := sql.Open("postgres", dbs.dbConfig.URL)
+	dbFullURL := dbs.dbConfig.URL + "/" + dbs.dbConfig.SchemaName + "?sslmode=" + dbs.dbConfig.SSLMode
+
+	databaseConnection, err := sql.Open("postgres", dbFullURL)
 	if err != nil {
 		panic(err)
 	}
 
 	dbs.databaseConnection = databaseConnection
+}
+
+func (dbs *DatabaseConnection) CreateSchema() {
+	db, err := sql.Open("postgres", dbs.dbConfig.URL+"?sslmode="+dbs.dbConfig.SSLMode)
+
+	if err != nil {
+		log.Fatalf("Error DB connection: %v", err)
+	}
+
+	defer db.Close()
+
+	_, err = db.Exec("CREATE DATABASE" + dbs.dbConfig.SchemaName)
+	if err != nil {
+		log.Fatalf("Error creating schema: %v", err)
+	}
 }
 
 func (dbs *DatabaseConnection) Close() {

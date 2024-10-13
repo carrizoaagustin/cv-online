@@ -1,9 +1,17 @@
 package config
 
-import "github.com/caarlos0/env/v11"
+import (
+	"log"
+	"os"
+
+	"github.com/caarlos0/env/v11"
+	"github.com/joho/godotenv"
+)
 
 type DatabaseConfig struct {
-	URL string `env:"PSQL_URL"`
+	URL        string `env:"PSQL_URL"`
+	SchemaName string `env:"PSQL_SCHEMA"`
+	SSLMode    string `env:"PSQL_SSL_MODE" envDefault:"disable"`
 }
 
 type App struct {
@@ -23,11 +31,18 @@ const (
 
 // revive:disable:unexported-return
 func LoadConfig() *config {
+	if os.Getenv("APP_ENVIRONMENT") != ProductionMode {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatalf("Error loading .env file with godotenv: %v", err)
+		}
+	}
+
 	var cfg config
 	err := env.Parse(&cfg)
 
 	if err != nil {
-		panic(err)
+		log.Fatalf("Error parsing env vars: %v", err)
 	}
 
 	return &cfg
