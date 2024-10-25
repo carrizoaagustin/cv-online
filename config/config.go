@@ -47,3 +47,25 @@ func LoadConfig() *config {
 
 	return &cfg
 }
+
+func LoadTestConfig() *config {
+	if os.Getenv("APP_ENVIRONMENT") != ProductionMode {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatalf("Error loading .env file with godotenv: %v", err)
+		}
+	}
+
+	schemaTest := "test-" + os.Getenv("PSQL_SCHEMA")
+
+	os.Setenv("PSQL_SCHEMA", schemaTest)
+
+	var cfg config
+	err := env.Parse(&cfg)
+
+	if err != nil {
+		log.Fatalf("Error parsing env vars: %v", err)
+	}
+
+	return &cfg
+}
