@@ -1,9 +1,15 @@
 -- +goose Up
 -- +goose StatementBegin
-SELECT 'up SQL query';
+CREATE TABLE resources(
+    resource_id UUID,
+    format     varchar(10) NOT NULL,
+    link       varchar(255) NOT NULL,
+
+    PRIMARY KEY(resource_id)
+);
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-SELECT 'down SQL query';
+DROP TABLE resources
 -- +goose StatementEnd

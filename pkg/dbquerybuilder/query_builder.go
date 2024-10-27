@@ -22,3 +22,5 @@ func New(dbConnection *sql.DB) *DBQueryBuilder {
 func (q *DBQueryBuilder) StartQuery() *goqu.Database {
 	return q.query
 }
+
+type Record map[string]interface{}
