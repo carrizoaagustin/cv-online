@@ -50,6 +50,7 @@ func LoadConfig() *config {
 	return &cfg
 }
 
+
 func getProjectRootPath() (string, error) {
 	dir, err := os.Getwd()
 	if err != nil {
