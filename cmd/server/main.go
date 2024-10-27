@@ -14,6 +14,7 @@ import (
 func main() {
 	cfg := config.LoadConfig()
 	databaseConnection := dbconnection.New(&cfg.DatabaseConfig)
+	databaseConnection.CreateSchema()
 	databaseConnection.Connect()
 	defer databaseConnection.Close()
 

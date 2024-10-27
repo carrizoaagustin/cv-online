@@ -3,6 +3,8 @@ package dbconnection
 import (
 	"database/sql"
 	"embed"
+	"fmt"
+	"log"
 
 	_ "github.com/lib/pq" // PSQL DRIVER.
 
@@ -25,12 +27,42 @@ func New(dbConfig *config.DatabaseConfig) *DatabaseConnection {
 }
 
 func (dbs *DatabaseConnection) Connect() {
-	databaseConnection, err := sql.Open("postgres", dbs.dbConfig.URL)
+	dbFullURL := dbs.dbConfig.URL + "/" + dbs.dbConfig.SchemaName + "?sslmode=" + dbs.dbConfig.SSLMode
+
+	databaseConnection, err := sql.Open("postgres", dbFullURL)
 	if err != nil {
 		panic(err)
 	}
 
 	dbs.databaseConnection = databaseConnection
+}
+
+func (dbs *DatabaseConnection) CreateSchema() {
+	db, err := sql.Open("postgres", fmt.Sprintf("%s?sslmode=%s", dbs.dbConfig.URL, dbs.dbConfig.SSLMode))
+
+	if err != nil {
+		log.Fatalf("Error DB connection: %v", err)
+	}
+
+	var exists bool
+
+	query := `SELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = $1);`
+	err = db.QueryRow(query, dbs.dbConfig.SchemaName).Scan(&exists)
+
+	if err != nil {
+		log.Fatalf("Failed to check database existence: %v", err)
+	}
+
+	queryCreateSchema := fmt.Sprintf(`CREATE DATABASE "%s"`, dbs.dbConfig.SchemaName)
+
+	if !exists {
+		_, err = db.Exec(queryCreateSchema)
+		if err != nil {
+			log.Fatalf("Error creating schema: %v", err)
+		}
+	}
+
+	defer db.Close()
 }
 
 func (dbs *DatabaseConnection) Close() {
