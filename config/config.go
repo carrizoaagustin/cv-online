@@ -91,7 +91,7 @@ func LoadTestConfig() *config {
 	var cfg config
 	err = env.Parse(&cfg)
 
-	fmt.Println(cfg.DatabaseConfig.SchemaName)
+	fmt.Println(cfg.DatabaseConfig.URL)
 
 	if err != nil {
 		log.Fatalf("Error parsing env vars: %v", err)
