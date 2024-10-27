@@ -9,13 +9,6 @@ on:
 permissions:
   contents: read
 
-env:
-  APP_ENVIRONMENT: ${{vars.APP_ENVIRONMENT}}
-  APP_PORT: ${{vars.APP_PORT}}
-  PSQL_SCHEMA: ${{vars.PSQL_SCHEMA}}
-  PSQL_URL: ${{vars.PSQL_URL}}
-  PSQL_SSL_MODE: ${{vars.PSQL_SSL_MODE}}
-
 jobs:
   test:
     services:
@@ -42,3 +35,9 @@ jobs:
 
     - name: Test with Go
       run: go test ./... -v
+      env:
+        APP_ENVIRONMENT: ${{vars.APP_ENVIRONMENT}}
+        APP_PORT: ${{vars.APP_PORT}}
+        PSQL_SCHEMA: ${{vars.PSQL_SCHEMA}}
+        PSQL_URL: ${{vars.PSQL_URL}}
+        PSQL_SSL_MODE: ${{vars.PSQL_SSL_MODE}}

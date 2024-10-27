@@ -77,7 +77,7 @@ func LoadTestConfig() *config {
 		log.Fatalf("Error getting root path: %v", err)
 	}
 
-	fmt.Println(os.Getenv("PSQL_URL"))
+	fmt.Println("Prueba PSQL:" + os.Getenv("PSQL_URL"))
 
 	if os.Getenv("APP_ENVIRONMENT") != ProductionMode {
 		err = godotenv.Load(rootPath + "/.env")
