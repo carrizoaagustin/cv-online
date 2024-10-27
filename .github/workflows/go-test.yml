@@ -37,9 +37,6 @@ jobs:
       with:
         go-version-file: go.mod
 
-    - name: Install dependencies
-      run: go get .
-
     - name: Build
       run: go build -v ./...
 
