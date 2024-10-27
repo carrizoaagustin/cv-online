@@ -26,6 +26,7 @@ jobs:
           --health-retries 5
 
     runs-on: ubuntu-latest
+
     env:
       APP_ENVIRONMENT: ${{ vars.APP_ENVIRONMENT }}
       APP_PORT: ${{ vars.APP_PORT }}
@@ -44,5 +45,5 @@ jobs:
     - name: Build
       run: go build -v ./...
 
-    - name: Test with Go
-      run: go test ./... -v
+    - name: Test
+      uses: robherley/go-test-action@v0
