@@ -15,13 +15,21 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_PASSWORD: ${{vars.POSTGRES_PASSWORD}}
+          POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     runs-on: ubuntu-latest
+    env:
+      APP_ENVIRONMENT: ${{ vars.APP_ENVIRONMENT }}
+      APP_PORT: ${{ vars.APP_PORT }}
+      PSQL_SCHEMA: ${{ vars.PSQL_SCHEMA }}
+      PSQL_URL: ${{ vars.PSQL_URL }}
+      PSQL_SSL_MODE: ${{ vars.PSQL_SSL_MODE }}
+    
     steps:
     - uses: actions/checkout@v4
 
@@ -35,9 +43,3 @@ jobs:
 
     - name: Test with Go
       run: go test ./... -v
-      env:
-        APP_ENVIRONMENT: ${{vars.APP_ENVIRONMENT}}
-        APP_PORT: ${{vars.APP_PORT}}
-        PSQL_SCHEMA: ${{vars.PSQL_SCHEMA}}
-        PSQL_URL: ${{vars.PSQL_URL}}
-        PSQL_SSL_MODE: ${{vars.PSQL_SSL_MODE}}
