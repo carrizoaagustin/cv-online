@@ -20,9 +20,7 @@ func (r *ResourceRepository) Create(resource domain.Resource) error {
 	_, err := r.queryBuilder.
 		StartQuery().
 		Insert("resources").
-		Rows(
-			dbquerybuilder.Record{"resource_id": resource.ID, "format": resource.Format},
-		).
+		Rows(dbquerybuilder.Record{"resource_id": resource.ID, "format": resource.Format, "link": resource.Link}).
 		Executor().
 		Exec()
 
