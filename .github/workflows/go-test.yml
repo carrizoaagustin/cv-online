@@ -1,4 +1,4 @@
-name: GO Test
+name: Go Test
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
       run: go build -v ./...
     
     - name: Clean cache
-      run: go clean -cache
+      run: echo "$PSQL_URL"
 
     - name: Test with Go
       run: go test ./... -v
