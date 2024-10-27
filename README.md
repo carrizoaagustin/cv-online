@@ -1,36 +1,49 @@
-# DEVELOPMENT
+# CV ONLINE
+cv-online is a personal project developed in collaboration with Miguel Cabeza, aimed at exposing endpoints to store information related to a person's curriculum vitae, allowing the data to be retrieved for display on a personal presentation page.
 
-## BASIC COMMANDS
+## RUN SERVER
 
 ### INIT SERVER WITHOUT DOCKER
 `go run ./cmd/server`
+OR
+`make init`
 
 ### ADD DEPENDENCIES
 `go get package/path`
 
 for example: `go get github.com/gin-gonic/gin`
 
+## HOW TO DEV
+
+### INSTALL DEV TOOLS
+`make install-tools`
+
+### MIGRATIONS
+
+#### CREATE MIGRATIONS
+`make migrate-create name=<name>`
+
+#### UP MIGRATIONS
+`make migrate-up`
+
+#### DOWN MIGRATIONS
+`make migrate-down`
+
+obs: delete the last migration applied
+
+### TESTING
+
+#### RUN TESTS
+`make test`
+
+#### RENDER HTML COVERAGE
+`make cover`
+
+OBS: This command generates an HTML file, which allows you to see which lines of code have been tested so far. You need to have previously run the command `make test`.
 
 ## DEPENDENCIES
+This project was developed with:
 - Gin gonic
 - goqu
 - google/uuid
-- goose (migrations) (install)
-
-
-## GOOSE
-https://github.com/pressly/goose
-
-### INSTALL
-`go install github.com/pressly/goose/v3/cmd/goose@latest`
-
-### CREATE MIGRATION
-`GOOSE_MIGRATION_DIR=./pkg/dbconnection/migrations goose create <name> sql`
-
-### DOWN
-
-`GOOSE_MIGRATION_DIR=./pkg/dbconnection/migrations GOOSE_DRIVER=postgres GOOSE_DBSTRING="postgres://postgres:root1234@localhost:5432/example?sslmode=disable" goose down`
-
-### UP
-
-`GOOSE_MIGRATION_DIR=./pkg/dbconnection/migrations GOOSE_DRIVER=postgres GOOSE_DBSTRING="postgres://postgres:root1234@localhost:5432/example?sslmode=disable" goose up`
+- goose
