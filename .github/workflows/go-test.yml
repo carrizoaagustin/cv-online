@@ -16,6 +16,9 @@ jobs:
         image: postgres
         env:
           POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -40,9 +43,6 @@ jobs:
 
     - name: Build
       run: go build -v ./...
-    
-    - name: Clean cache
-      run: echo "$PSQL_URL"
 
     - name: Test with Go
       run: go test ./... -v
