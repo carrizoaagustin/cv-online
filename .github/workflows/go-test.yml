@@ -15,7 +15,7 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          POSTGRES_PASSWORD: ${{vars.POSTGRES_PASSWORD}}
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -39,5 +39,5 @@ jobs:
         APP_ENVIRONMENT: ${{vars.APP_ENVIRONMENT}}
         APP_PORT: ${{vars.APP_PORT}}
         PSQL_SCHEMA: ${{vars.PSQL_SCHEMA}}
-        PSQL_URL: ${{secrets.PSQL_URL}}
+        PSQL_URL: ${{vars.PSQL_URL}}
         PSQL_SSL_MODE: ${{vars.PSQL_SSL_MODE}}
