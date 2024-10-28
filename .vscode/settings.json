@@ -1,5 +1,5 @@
 {
-  "go.lintOnSave": "file",
+  "go.lintOnSave": "package",
   "go.formatTool": "goimports",
   "go.lintTool": "golangci-lint",
   "go.lintFlags": ["--fast"],
