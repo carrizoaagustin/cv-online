@@ -5,17 +5,17 @@ import (
 	"github.com/carrizoaagustin/cv-online/pkg/dbquerybuilder"
 )
 
-type ResourceRepository struct {
+type ResourceRepositoryDB struct {
 	queryBuilder *dbquerybuilder.DBQueryBuilder
 }
 
-func NewResourceRepository(queryBuilder *dbquerybuilder.DBQueryBuilder) *ResourceRepository {
-	return &ResourceRepository{
+func NewResourceRepository(queryBuilder *dbquerybuilder.DBQueryBuilder) domain.ResourceRepository {
+	return &ResourceRepositoryDB{
 		queryBuilder: queryBuilder,
 	}
 }
 
-func (r *ResourceRepository) Create(resource domain.Resource) error {
+func (r *ResourceRepositoryDB) Create(resource domain.Resource) error {
 	// USE EXAMPLE FOR MIGUEL
 	_, err := r.queryBuilder.
 		StartQuery().
