@@ -38,7 +38,7 @@ func TestInsertResource(t *testing.T) {
 	tests := map[string]struct {
 		given    Given
 		expected Expected
-		setup    func(resourceRepository *repository.ResourceRepository)
+		setup    func(resourceRepository domain.ResourceRepository)
 	}{
 		"Creation success": {
 			given: Given{
@@ -55,7 +55,7 @@ func TestInsertResource(t *testing.T) {
 			expected: Expected{
 				wantErr: true,
 			},
-			setup: func(resourceRepository *repository.ResourceRepository) {
+			setup: func(resourceRepository domain.ResourceRepository) {
 				err := resourceRepository.Create(domain.Resource{ID: uuid.Nil, Format: "pdf", Link: "https://asas"})
 
 				if err != nil {
