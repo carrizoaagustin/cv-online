@@ -26,6 +26,7 @@ jobs:
           --health-retries 5
 
     runs-on: ubuntu-latest
+
     env:
       APP_ENVIRONMENT: ${{ vars.APP_ENVIRONMENT }}
       APP_PORT: ${{ vars.APP_PORT }}
@@ -43,6 +44,11 @@ jobs:
 
     - name: Build
       run: go build -v ./...
-
-    - name: Test with Go
-      run: go test ./... -v
+    
+    - name: generate test coverage
+      run: go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
+  
+    - name: check test coverage
+      uses: vladopajic/go-test-coverage@v2
+      with:
+        config: ./.testcoverage.yml
