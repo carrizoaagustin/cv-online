@@ -3,3 +3,7 @@ APP_PORT=8000
 PSQL_SCHEMA=cv-online
 PSQL_URL=postgres://postgres:root1234@localhost:5432
 PSQL_SSL_MODE=disable
+R2_ACCOUNT_ID=
+R2_ACCESS_KEY=
+R2_SECRET_KEY=
+R2_BUCKET_NAME=
