@@ -8,15 +8,18 @@ import (
 	"log"
 	"strings"
 
-	configAws "github.com/aws/aws-sdk-go-v2/config"
-
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go/aws"
 
+	configAws "github.com/aws/aws-sdk-go-v2/config"
+
 	"github.com/carrizoaagustin/cv-online/config"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
 )
+
+const ErrorMessageInvalidFile string = "invalid file"
+const ErrorMessageInvalidFilename string = "invalid filename"
 
 type S3Client interface {
 	PutObject(ctx context.Context, input *s3.PutObjectInput, opts ...func(*s3.Options)) (*s3.PutObjectOutput, error)
@@ -27,7 +30,7 @@ type FileStorageServiceR2 struct {
 	config config.StorageR2
 }
 
-func NewS3Client(r2Config config.StorageR2) S3Client {
+func NewS3Client(r2Config config.StorageR2) S3Client { // coverage-ignore
 	cfg, err := configAws.LoadDefaultConfig(context.TODO(),
 		configAws.WithCredentialsProvider(
 			credentials.NewStaticCredentialsProvider(r2Config.AccessKey, r2Config.SecretKey, ""),
@@ -53,10 +56,20 @@ func NewFileStorageServiceR2(config config.StorageR2, client S3Client) domain.Fi
 
 func (fs *FileStorageServiceR2) UploadFile(file []byte, filename string, folders []string) (string, error) {
 	if len(file) == 0 {
-		return "", errors.New("invalid file")
+		return "", errors.New(ErrorMessageInvalidFile)
 	}
 
-	key := strings.Join(folders, "/") + filename
+	if filename == "" {
+		return "", errors.New(ErrorMessageInvalidFilename)
+	}
+
+	var key string
+
+	if folders != nil {
+		key = strings.Join(folders, "/") + "/" + filename
+	} else {
+		key = filename
+	}
 
 	input := &s3.PutObjectInput{
 		Bucket:      aws.String(fs.config.Bucket),
