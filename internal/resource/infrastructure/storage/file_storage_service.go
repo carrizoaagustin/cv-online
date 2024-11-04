@@ -54,27 +54,27 @@ func NewFileStorageServiceR2(config config.StorageR2, client S3Client) domain.Fi
 	}
 }
 
-func (fs *FileStorageServiceR2) UploadFile(file []byte, filename string, folders []string) (string, error) {
-	if len(file) == 0 {
+func (fs *FileStorageServiceR2) UploadFile(fileInput domain.FileInput) (string, error) {
+	if len(fileInput.File) == 0 {
 		return "", errors.New(ErrorMessageInvalidFile)
 	}
 
-	if filename == "" {
+	if fileInput.Filename == "" {
 		return "", errors.New(ErrorMessageInvalidFilename)
 	}
 
 	var key string
 
-	if folders != nil {
-		key = strings.Join(folders, "/") + "/" + filename
+	if fileInput.Folders != nil {
+		key = strings.Join(fileInput.Folders, "/") + "/" + fileInput.Filename
 	} else {
-		key = filename
+		key = fileInput.Filename
 	}
 
 	input := &s3.PutObjectInput{
 		Bucket:      aws.String(fs.config.Bucket),
-		Key:         aws.String(filename),
-		Body:        bytes.NewReader(file),
+		Key:         aws.String(fileInput.Filename),
+		Body:        bytes.NewReader(fileInput.File),
 		ContentType: aws.String("image/png"), // Set the content type to image/jpeg (change as needed)
 	}
 

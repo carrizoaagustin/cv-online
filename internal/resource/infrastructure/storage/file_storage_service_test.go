@@ -12,6 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/carrizoaagustin/cv-online/config"
+	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
 	"github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/storage"
 )
 
@@ -34,9 +35,7 @@ func TestUploadFile(t *testing.T) {
 	}
 
 	type Given struct {
-		file      []byte
-		filename  string
-		folders   []string
+		fileInput domain.FileInput
 		mockValue error
 	}
 
@@ -62,9 +61,11 @@ func TestUploadFile(t *testing.T) {
 	}{
 		"File is nil": {
 			given: Given{
-				file:      nil,
-				filename:  filename,
-				folders:   folders,
+				fileInput: domain.FileInput{
+					File:     nil,
+					Filename: filename,
+					Folders:  folders,
+				},
 				mockValue: nil,
 			},
 			expected: Expected{
@@ -74,9 +75,11 @@ func TestUploadFile(t *testing.T) {
 		},
 		"Folders is nil": {
 			given: Given{
-				file:      randomBytes,
-				filename:  filename,
-				folders:   nil,
+				fileInput: domain.FileInput{
+					File:     randomBytes,
+					Filename: filename,
+					Folders:  nil,
+				},
 				mockValue: nil,
 			},
 			expected: Expected{
@@ -86,9 +89,11 @@ func TestUploadFile(t *testing.T) {
 		},
 		"Upload file to folder": {
 			given: Given{
-				file:      randomBytes,
-				filename:  filename,
-				folders:   folders,
+				fileInput: domain.FileInput{
+					File:     randomBytes,
+					Filename: filename,
+					Folders:  folders,
+				},
 				mockValue: nil,
 			},
 			expected: Expected{
@@ -98,9 +103,11 @@ func TestUploadFile(t *testing.T) {
 		},
 		"Filename is empty": {
 			given: Given{
-				file:      randomBytes,
-				filename:  "",
-				folders:   folders,
+				fileInput: domain.FileInput{
+					File:     randomBytes,
+					Filename: "",
+					Folders:  folders,
+				},
 				mockValue: nil,
 			},
 			expected: Expected{
@@ -110,9 +117,11 @@ func TestUploadFile(t *testing.T) {
 		},
 		"R2 error": {
 			given: Given{
-				file:      randomBytes,
-				filename:  filename,
-				folders:   folders,
+				fileInput: domain.FileInput{
+					File:     randomBytes,
+					Filename: filename,
+					Folders:  folders,
+				},
 				mockValue: errors.New(errorR2Message),
 			},
 			expected: Expected{
@@ -131,7 +140,7 @@ func TestUploadFile(t *testing.T) {
 				On("PutObject", mock.Anything, mock.Anything, mock.Anything).
 				Return(&s3.PutObjectOutput{}, caseData.given.mockValue)
 
-			key, err := fileStorage.UploadFile(caseData.given.file, caseData.given.filename, caseData.given.folders)
+			key, err := fileStorage.UploadFile(caseData.given.fileInput)
 
 			require.Equal(t, caseData.expected.key, key, "Keys don't match")
 

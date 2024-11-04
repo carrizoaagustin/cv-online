@@ -5,5 +5,5 @@ type ResourceService interface {
 }
 
 type FileStorageService interface {
-	UploadFile(file []byte, filename string, folders []string) (string, error)
+	UploadFile(file FileInput) (string, error)
 }
