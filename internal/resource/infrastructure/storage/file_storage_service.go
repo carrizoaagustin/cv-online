@@ -75,7 +75,7 @@ func (fs *FileStorageServiceR2) UploadFile(fileInput domain.FileInput) (string, 
 		Bucket:      aws.String(fs.config.Bucket),
 		Key:         aws.String(fileInput.Filename),
 		Body:        bytes.NewReader(fileInput.File),
-		ContentType: aws.String("image/png"), // Set the content type to image/jpeg (change as needed)
+		ContentType: aws.String(fileInput.ContentType),
 	}
 
 	_, err := fs.client.PutObject(context.TODO(), input)
