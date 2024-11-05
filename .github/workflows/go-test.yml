@@ -62,4 +62,3 @@ jobs:
     - name: POST-TEST
       run: |
         go run ./cmd/post_tests
-        rm -f ${{vars.PRE_TEST_ENTRYPOINT}} ${{vars.POST_TEST_ENTRYPOINT}}
