@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/doug-martin/goqu/v9"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
@@ -68,7 +69,10 @@ func TestInsertResource(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			t.Cleanup(func() {
-				_, err := dbResources.DBquerybuilder.StartQuery().Truncate("resources").Executor().Exec()
+				_, err := dbResources.DBquerybuilder.StartQuery().
+					Delete("resources").
+					Where(goqu.C("resource_id").Eq(test.given.resource.ID)).
+					Executor().Exec()
 
 				if err != nil {
 					t.Errorf("Error cleaning resources table")
