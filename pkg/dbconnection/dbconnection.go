@@ -73,6 +73,10 @@ func (dbs *DatabaseConnection) RunMigrations() {
 	dbmigrate.Up(dbs.databaseConnection, "postgres", migrationFiles, "migrations")
 }
 
+func (dbs *DatabaseConnection) DeleteMigrations() {
+	dbmigrate.Down(dbs.databaseConnection, "postgres", migrationFiles, "migrations")
+}
+
 func (dbs *DatabaseConnection) GetDatabaseConnection() *sql.DB {
 	return dbs.databaseConnection
 }
