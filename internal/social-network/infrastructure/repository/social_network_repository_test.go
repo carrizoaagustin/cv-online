@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/doug-martin/goqu/v9"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
@@ -16,7 +17,7 @@ import (
 var dbResources *testutils.TestDBResources
 
 func TestMain(m *testing.M) {
-	//dbResources = testutils.InitTestDBResources()
+	dbResources = testutils.InitTestDBResources()
 
 	// Ejecutar los tests
 	code := m.Run()
@@ -68,7 +69,10 @@ func TestInsertSocialNetwork(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			t.Cleanup(func() {
-				_, err := dbResources.DBquerybuilder.StartQuery().Truncate("social_networks").Executor().Exec()
+				_, err := dbResources.DBquerybuilder.StartQuery().
+					Delete("social_networks").
+					Where(goqu.C("social_network_id").Eq(test.given.socialNetwork.ID)).
+					Executor().Exec()
 				if err != nil {
 					t.Errorf("Error cleaning social_networks table")
 				}
