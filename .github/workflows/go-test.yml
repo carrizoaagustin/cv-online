@@ -33,8 +33,8 @@ jobs:
       PSQL_SCHEMA: ${{ vars.PSQL_SCHEMA }}
       PSQL_URL: ${{ vars.PSQL_URL }}
       PSQL_SSL_MODE: ${{ vars.PSQL_SSL_MODE }}
-      PRE_TEST_ENTRYPOINT: pre-test
-      POST_TEST_ENTRYPOINT: post-test
+      PRE_TEST_ENTRYPOINT: "pre-test"
+      POST_TEST_ENTRYPOINT: "post-test"
     
     steps:
     - uses: actions/checkout@v4
@@ -48,11 +48,10 @@ jobs:
       run: go build -v ./...
 
     - name: PRE-TEST
-      run:
-        go build -o $(PRE_TEST_ENTRYPOINT) ./cmd/pre_tests
-        ./$(PRE_TEST_ENTRYPOINT)
+      run: |
+        go build -o ${{vars.PRE_TEST_ENTRYPOINT}} ./cmd/pre_tests
+        ./${{vars.PRE_TEST_ENTRYPOINT}}
 
-    
     - name: generate test coverage
       run: go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
   
@@ -62,7 +61,7 @@ jobs:
         config: ./.testcoverage.yml
 
     - name: POST-TEST
-      run:  
-        go build -o $POST_TEST_ENTRYPOINT ./cmd/post_tests
-        ./$POST_TEST_ENTRYPOINT
-        rm -f $PRE_TEST_ENTRYPOINT $POST_TEST_ENTRYPOINT
+      run: |
+        go build -o ${{vars.POST_TEST_ENTRYPOINT}} ./cmd/post_tests
+        ./${{vars.POST_TEST_ENTRYPOINT}}
+        rm -f ${{vars.PRE_TEST_ENTRYPOINT}} ${{vars.POST_TEST_ENTRYPOINT}}
