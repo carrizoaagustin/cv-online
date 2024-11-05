@@ -44,6 +44,9 @@ jobs:
 
     - name: Build
       run: go build -v ./...
+
+    - name: PRE-TEST
+      run: make pre-test
     
     - name: generate test coverage
       run: go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
@@ -52,3 +55,6 @@ jobs:
       uses: vladopajic/go-test-coverage@v2
       with:
         config: ./.testcoverage.yml
+
+    - name: POST-TEST
+      run: make post-test
