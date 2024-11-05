@@ -2,6 +2,10 @@
 include .env
 export $(shell sed 's/=.*//' .env)
 
+PRE_TEST_ENTRYPOINT=pre_tests
+POST_TEST_ENTRYPOINT=pre_tests
+
+
 # CONFIGS
 GOBIN ?= $$(go env GOPATH)/bin
 MIGRATION_DIR=./pkg/dbconnection/migrations
@@ -17,8 +21,26 @@ install-tools:
 init:
 	go run ./cmd/server
 
+.PHONY: pre-test
+pre-test:
+	@echo ""
+	@echo "---PREPARE TESTS---"
+	@echo ""
+	go build -o $(PRE_TEST_ENTRYPOINT) ./cmd/pre_tests
+	./$(PRE_TEST_ENTRYPOINT)
+
+.PHONY: post-test
+post-test:
+	@echo ""
+	@echo "---CLEAN TESTS---"
+	@echo ""
+	go build -o $(POST_TEST_ENTRYPOINT) ./cmd/post_tests
+	./$(POST_TEST_ENTRYPOINT)
+	rm -f $(PRE_TEST_ENTRYPOINT) $(POST_TEST_ENTRYPOINT)
+
 .PHONY: test
 test:
+	$(MAKE) pre-test
 	@echo ""
 	@echo "---TESTING---"
 	@echo ""
@@ -27,6 +49,7 @@ test:
 	@echo "---COVERAGE OUTPUT---"
 	@echo ""
 	${GOBIN}/go-test-coverage --config=./.testcoverage.yml
+	$(MAKE) post-test
 
 .PHONY: cover
 cover:
