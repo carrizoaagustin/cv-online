@@ -63,6 +63,6 @@ jobs:
 
     - name: POST-TEST
       run:  
-        go build -o $(POST_TEST_ENTRYPOINT) ./cmd/post_tests
-        ./$(POST_TEST_ENTRYPOINT)
-        rm -f $(PRE_TEST_ENTRYPOINT) $(POST_TEST_ENTRYPOINT)
+        go build -o $POST_TEST_ENTRYPOINT ./cmd/post_tests
+        ./$POST_TEST_ENTRYPOINT
+        rm -f $PRE_TEST_ENTRYPOINT $POST_TEST_ENTRYPOINT
