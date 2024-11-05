@@ -8,8 +8,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
-	"github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/repository"
+	"github.com/carrizoaagustin/cv-online/internal/social-network/domain"
+	"github.com/carrizoaagustin/cv-online/internal/social-network/infrastructure/repository"
 	"github.com/carrizoaagustin/cv-online/testutils"
 )
 
@@ -27,9 +27,9 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func TestInsertResource(t *testing.T) {
+func TestInsertSocialNetwork(t *testing.T) {
 	type Given struct {
-		resource domain.Resource
+		socialNetwork domain.SocialNetwork
 	}
 
 	type Expected struct {
@@ -39,25 +39,25 @@ func TestInsertResource(t *testing.T) {
 	tests := map[string]struct {
 		given    Given
 		expected Expected
-		setup    func(resourceRepository domain.ResourceRepository)
+		setup    func(socialNetworkRepository domain.SocialNetworkRepository)
 	}{
 		"Creation success": {
 			given: Given{
-				resource: domain.Resource{ID: uuid.New(), Format: "pdf", Link: "https://asas"},
+				socialNetwork: domain.SocialNetwork{ID: uuid.New(), Name: "github"},
 			},
 			expected: Expected{
 				wantErr: false,
 			},
 		},
-		"query error": {
+		"Query error": {
 			given: Given{
-				resource: domain.Resource{ID: uuid.Nil, Format: "pdf", Link: "https://asas"},
+				socialNetwork: domain.SocialNetwork{ID: uuid.Nil, Name: "github"},
 			},
 			expected: Expected{
 				wantErr: true,
 			},
-			setup: func(resourceRepository domain.ResourceRepository) {
-				err := resourceRepository.Create(domain.Resource{ID: uuid.Nil, Format: "pdf", Link: "https://asas"})
+			setup: func(socialNetworkRepository domain.SocialNetworkRepository) {
+				err := socialNetworkRepository.Create(domain.SocialNetwork{ID: uuid.Nil, Name: "github"})
 
 				if err != nil {
 					t.Errorf("Setup error. %v", err)
@@ -70,22 +70,21 @@ func TestInsertResource(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Cleanup(func() {
 				_, err := dbResources.DBquerybuilder.StartQuery().
-					Delete("resources").
-					Where(goqu.C("resource_id").Eq(test.given.resource.ID)).
+					Delete("social_networks").
+					Where(goqu.C("social_network_id").Eq(test.given.socialNetwork.ID)).
 					Executor().Exec()
-
 				if err != nil {
-					t.Errorf("Error cleaning resources table")
+					t.Errorf("Error cleaning social_networks table")
 				}
 			})
 
-			resourceRepository := repository.NewResourceRepository(dbResources.DBquerybuilder)
+			socialNetworkRepository := repository.NewSocialNetworkRepository(dbResources.DBquerybuilder)
 
 			if test.setup != nil {
-				test.setup(resourceRepository)
+				test.setup(socialNetworkRepository)
 			}
 
-			err := resourceRepository.Create(test.given.resource)
+			err := socialNetworkRepository.Create(test.given.socialNetwork)
 
 			if test.expected.wantErr {
 				require.Error(t, err)

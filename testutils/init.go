@@ -15,10 +15,7 @@ func InitTestDBResources() *TestDBResources {
 	cfg := config.LoadTestConfig()
 
 	databaseConnection := dbconnection.New(&cfg.DatabaseConfig)
-	databaseConnection.CreateSchema()
 	databaseConnection.Connect()
-
-	databaseConnection.RunMigrations()
 
 	// INIT OBJECTS
 	queryBuilder := dbquerybuilder.New(databaseConnection.GetDatabaseConnection())

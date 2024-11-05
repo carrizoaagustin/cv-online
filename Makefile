@@ -17,8 +17,21 @@ install-tools:
 init:
 	go run ./cmd/server
 
+.PHONY: pre-test
+pre-test:
+
+	go run ./cmd/pre_tests
+
+.PHONY: post-test
+post-test:
+	go run ./cmd/post_tests
+
 .PHONY: test
 test:
+	@echo ""
+	@echo "---PREPARE TESTS---"
+	@echo ""
+	$(MAKE) pre-test
 	@echo ""
 	@echo "---TESTING---"
 	@echo ""
@@ -27,6 +40,10 @@ test:
 	@echo "---COVERAGE OUTPUT---"
 	@echo ""
 	${GOBIN}/go-test-coverage --config=./.testcoverage.yml
+	@echo ""
+	@echo "---CLEAN TESTS---"
+	@echo ""
+	$(MAKE) post-test
 
 .PHONY: cover
 cover:

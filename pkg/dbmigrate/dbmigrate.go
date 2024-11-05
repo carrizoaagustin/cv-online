@@ -26,7 +26,7 @@ func Down(db *sql.DB, dbDialect string, embedMigrations embed.FS, dir string) {
 		panic(err)
 	}
 
-	if err := goose.Down(db, dir); err != nil {
+	if err := goose.DownTo(db, dir, 0); err != nil {
 		panic(err)
 	}
 }
