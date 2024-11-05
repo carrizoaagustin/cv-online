@@ -49,8 +49,7 @@ jobs:
 
     - name: PRE-TEST
       run: |
-        go build -o ${{vars.PRE_TEST_ENTRYPOINT}} ./cmd/pre_tests
-        ./${{vars.PRE_TEST_ENTRYPOINT}}
+        go run ./cmd/pre_tests
 
     - name: generate test coverage
       run: go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
@@ -62,6 +61,5 @@ jobs:
 
     - name: POST-TEST
       run: |
-        go build -o ${{vars.POST_TEST_ENTRYPOINT}} ./cmd/post_tests
-        ./${{vars.POST_TEST_ENTRYPOINT}}
+        go run ./cmd/post_tests
         rm -f ${{vars.PRE_TEST_ENTRYPOINT}} ${{vars.POST_TEST_ENTRYPOINT}}
