@@ -8,5 +8,5 @@ CREATE TABLE social_networks (
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE socialNetworks;
+DROP TABLE social_networks;
 -- +goose StatementEnd
