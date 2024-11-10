@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/carrizoaagustin/cv-online/config"
-	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
+	"github.com/carrizoaagustin/cv-online/internal/resource/domain/model"
 	"github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/storage"
 )
 
@@ -35,7 +35,7 @@ func TestUploadFile(t *testing.T) {
 	}
 
 	type Given struct {
-		fileInput domain.FileInput
+		fileInput model.FileInput
 		mockValue error
 	}
 
@@ -61,7 +61,7 @@ func TestUploadFile(t *testing.T) {
 	}{
 		"File is nil": {
 			given: Given{
-				fileInput: domain.FileInput{
+				fileInput: model.FileInput{
 					File:     nil,
 					Filename: filename,
 					Folders:  folders,
@@ -75,7 +75,7 @@ func TestUploadFile(t *testing.T) {
 		},
 		"Folders is nil": {
 			given: Given{
-				fileInput: domain.FileInput{
+				fileInput: model.FileInput{
 					File:     randomBytes,
 					Filename: filename,
 					Folders:  nil,
@@ -89,7 +89,7 @@ func TestUploadFile(t *testing.T) {
 		},
 		"Upload file to folder": {
 			given: Given{
-				fileInput: domain.FileInput{
+				fileInput: model.FileInput{
 					File:     randomBytes,
 					Filename: filename,
 					Folders:  folders,
@@ -103,7 +103,7 @@ func TestUploadFile(t *testing.T) {
 		},
 		"Filename is empty": {
 			given: Given{
-				fileInput: domain.FileInput{
+				fileInput: model.FileInput{
 					File:     randomBytes,
 					Filename: "",
 					Folders:  folders,
@@ -117,7 +117,7 @@ func TestUploadFile(t *testing.T) {
 		},
 		"R2 error": {
 			given: Given{
-				fileInput: domain.FileInput{
+				fileInput: model.FileInput{
 					File:     randomBytes,
 					Filename: filename,
 					Folders:  folders,

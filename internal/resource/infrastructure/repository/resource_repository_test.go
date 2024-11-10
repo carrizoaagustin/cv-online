@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
+	"github.com/carrizoaagustin/cv-online/internal/resource/domain/model"
 	"github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/repository"
 	"github.com/carrizoaagustin/cv-online/testutils"
 )
@@ -29,7 +30,7 @@ func TestMain(m *testing.M) {
 
 func TestInsertResource(t *testing.T) {
 	type Given struct {
-		resource domain.Resource
+		resource model.Resource
 	}
 
 	type Expected struct {
@@ -43,7 +44,7 @@ func TestInsertResource(t *testing.T) {
 	}{
 		"Creation success": {
 			given: Given{
-				resource: domain.Resource{ID: uuid.New(), Format: "pdf", Link: "https://asas"},
+				resource: model.Resource{ID: uuid.New(), Format: "pdf", Link: "https://asas"},
 			},
 			expected: Expected{
 				wantErr: false,
@@ -51,13 +52,13 @@ func TestInsertResource(t *testing.T) {
 		},
 		"query error": {
 			given: Given{
-				resource: domain.Resource{ID: uuid.Nil, Format: "pdf", Link: "https://asas"},
+				resource: model.Resource{ID: uuid.Nil, Format: "pdf", Link: "https://asas"},
 			},
 			expected: Expected{
 				wantErr: true,
 			},
 			setup: func(resourceRepository domain.ResourceRepository) {
-				err := resourceRepository.Create(domain.Resource{ID: uuid.Nil, Format: "pdf", Link: "https://asas"})
+				err := resourceRepository.Create(model.Resource{ID: uuid.Nil, Format: "pdf", Link: "https://asas"})
 
 				if err != nil {
 					t.Errorf("Setup error. %v", err)

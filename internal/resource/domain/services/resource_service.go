@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
+	"github.com/carrizoaagustin/cv-online/internal/resource/domain/model"
 )
 
 type ResourceService struct {
@@ -14,7 +15,7 @@ func NewResourceService(repository domain.ResourceRepository) domain.ResourceSer
 	}
 }
 
-func (s *ResourceService) Create(resource domain.Resource) error {
+func (s *ResourceService) Create(resource model.Resource) error {
 	s.resourceRepository.Create(resource)
 
 	return nil
