@@ -3,9 +3,10 @@ package model
 import (
 	"slices"
 
+	"github.com/google/uuid"
+
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/failures"
 	"github.com/carrizoaagustin/cv-online/pkg/apperrors"
-	"github.com/google/uuid"
 )
 
 type Resource struct {
