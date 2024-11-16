@@ -118,7 +118,6 @@ func TestResourceService(t *testing.T) {
 				require.IsType(t, err, caseData.expected.err, "Error type don't match")
 				require.EqualError(t, err, caseData.expected.err.Error(), "Error don't match")
 			}
-
 		})
 	}
 }
