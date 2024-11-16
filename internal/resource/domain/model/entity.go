@@ -16,19 +16,19 @@ type Resource struct {
 }
 
 const (
-	pdf  = "application/pdf"
-	png  = "image/png"
-	jpeg = "image/jpeg"
-	gift = "image/gif"
+	Pdf  = "application/pdf"
+	Png  = "image/png"
+	Jpeg = "image/jpeg"
+	Gift = "image/gif"
 )
 
 func isValidFormat(format string) bool {
-	allowedFormats := []string{pdf, png, jpeg, gift}
+	allowedFormats := []string{Pdf, Png, Jpeg, Gift}
 	return slices.Contains(allowedFormats, format)
 }
 
 func NewResource(format string, link string) (*Resource, error) {
-	if isValidFormat(format) {
+	if !isValidFormat(format) {
 		return nil, apperrors.NewValidationError(failures.ResourceInvalidFormatError, "format")
 	}
 
