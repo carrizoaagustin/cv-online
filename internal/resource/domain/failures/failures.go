@@ -16,4 +16,8 @@ var (
 		Message: "Unexpected error when create resource.",
 		Code:    "RESOURCE_UNEXPECTED_ERROR",
 	}
+	UploadError = apperrors.ErrorContent{
+		Message: "Error uploading file.",
+		Code:    "RESOURCE_UPLOAD_ERROR",
+	}
 )
