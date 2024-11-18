@@ -1,4 +1,4 @@
-package services
+package service
 
 import (
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain"

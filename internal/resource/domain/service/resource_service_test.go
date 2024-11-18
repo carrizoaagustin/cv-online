@@ -1,4 +1,4 @@
-package services_test
+package service_test
 
 import (
 	"errors"
@@ -10,7 +10,7 @@ import (
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/dto"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/failures"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/model"
-	"github.com/carrizoaagustin/cv-online/internal/resource/domain/services"
+	"github.com/carrizoaagustin/cv-online/internal/resource/domain/service"
 	"github.com/carrizoaagustin/cv-online/pkg/apperrors"
 )
 
@@ -103,7 +103,7 @@ func TestResourceService(t *testing.T) {
 	for name, caseData := range testCases {
 		t.Run(name, func(t *testing.T) {
 			mockRepository := new(MockResourceRepository)
-			resourceService := services.NewResourceService(mockRepository)
+			resourceService := service.NewResourceService(mockRepository)
 			mockRepository.
 				On("Create", mock.Anything).
 				Return(caseData.given.mockValue)
