@@ -129,10 +129,8 @@ func TestResourceService(t *testing.T) {
 			_, err := resourceService.Create(caseData.given.createResourceData)
 
 			if caseData.expected.err == nil {
-				// Caso de éxito: verificar que no haya error
 				require.NoError(t, err, "Expected no error but got one")
 			} else {
-				// Caso de fallo: verificar el error esperado
 				require.IsType(t, err, caseData.expected.err, "Error type don't match")
 				require.EqualError(t, err, caseData.expected.err.Error(), "Error don't match")
 			}
