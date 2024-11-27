@@ -9,7 +9,7 @@ var (
 		Code:    "RESOURCE_INVALID_LINK",
 	}
 	ResourceInvalidFilenameError = apperrors.ErrorContent{
-		Message: "Invalid filaname",
+		Message: "Invalid filename",
 		Code:    "RESOURCE_INVALID_FILENAME",
 	}
 	ResourceInvalidFormatError = apperrors.ErrorContent{
