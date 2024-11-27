@@ -6,7 +6,7 @@ import (
 )
 
 type ResourceService interface {
-	Create(resource dto.CreateResourceData) error
+	Create(resource dto.CreateResourceData) (*model.Resource, error)
 }
 
 type FileStorageService interface {

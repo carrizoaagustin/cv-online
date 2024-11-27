@@ -41,8 +41,9 @@ func TestResourceService(t *testing.T) {
 		"Creation success": {
 			given: Given{
 				createResourceData: dto.CreateResourceData{
-					Link:   "https://test.image.com/image",
-					Format: model.Pdf,
+					Link:     "https://test.image.com/image",
+					Format:   model.Pdf,
+					Filename: "test.pdf",
 				},
 				mockValue: nil,
 			},
@@ -53,8 +54,9 @@ func TestResourceService(t *testing.T) {
 		"Invalid format": {
 			given: Given{
 				createResourceData: dto.CreateResourceData{
-					Link:   "https://test.image.com/image",
-					Format: "invalid",
+					Link:     "https://test.image.com/image",
+					Format:   "invalid",
+					Filename: "test.pdf",
 				},
 				mockValue: nil,
 			},
@@ -65,8 +67,9 @@ func TestResourceService(t *testing.T) {
 		"format empty": {
 			given: Given{
 				createResourceData: dto.CreateResourceData{
-					Link:   "https://test.image.com/image",
-					Format: "",
+					Link:     "https://test.image.com/image",
+					Format:   "",
+					Filename: "test.pdf",
 				},
 				mockValue: nil,
 			},
@@ -77,8 +80,9 @@ func TestResourceService(t *testing.T) {
 		"Invalid link": {
 			given: Given{
 				createResourceData: dto.CreateResourceData{
-					Link:   "",
-					Format: model.Pdf,
+					Link:     "",
+					Format:   model.Pdf,
+					Filename: "test.pdf",
 				},
 				mockValue: nil,
 			},
@@ -86,11 +90,25 @@ func TestResourceService(t *testing.T) {
 				err: apperrors.NewValidationError(failures.ResourceInvalidLinkError, "link"),
 			},
 		},
+		"Invalid filename": {
+			given: Given{
+				createResourceData: dto.CreateResourceData{
+					Link:     "https://test.image.com/image",
+					Format:   model.Pdf,
+					Filename: "",
+				},
+				mockValue: nil,
+			},
+			expected: Expected{
+				err: apperrors.NewValidationError(failures.ResourceInvalidFilenameError, "filename"),
+			},
+		},
 		"Repository error": {
 			given: Given{
 				createResourceData: dto.CreateResourceData{
-					Link:   "https://test.image.com/image",
-					Format: model.Pdf,
+					Link:     "https://test.image.com/image",
+					Format:   model.Pdf,
+					Filename: "filename",
 				},
 				mockValue: errors.New("test"),
 			},
@@ -108,7 +126,7 @@ func TestResourceService(t *testing.T) {
 				On("Create", mock.Anything).
 				Return(caseData.given.mockValue)
 
-			err := resourceService.Create(caseData.given.createResourceData)
+			_, err := resourceService.Create(caseData.given.createResourceData)
 
 			if caseData.expected.err == nil {
 				// Caso de éxito: verificar que no haya error

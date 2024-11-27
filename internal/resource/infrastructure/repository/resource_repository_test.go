@@ -44,7 +44,7 @@ func TestInsertResource(t *testing.T) {
 	}{
 		"Creation success": {
 			given: Given{
-				resource: model.Resource{ID: uuid.New(), Format: "pdf", Link: "https://asas"},
+				resource: model.Resource{ID: uuid.New(), Format: "pdf", Link: "https://asas", Filename: "filename"},
 			},
 			expected: Expected{
 				wantErr: false,
@@ -52,13 +52,13 @@ func TestInsertResource(t *testing.T) {
 		},
 		"query error": {
 			given: Given{
-				resource: model.Resource{ID: uuid.Nil, Format: "pdf", Link: "https://asas"},
+				resource: model.Resource{ID: uuid.Nil, Format: "pdf", Link: "https://asas", Filename: "filename"},
 			},
 			expected: Expected{
 				wantErr: true,
 			},
 			setup: func(resourceRepository domain.ResourceRepository) {
-				err := resourceRepository.Create(model.Resource{ID: uuid.Nil, Format: "pdf", Link: "https://asas"})
+				err := resourceRepository.Create(model.Resource{ID: uuid.Nil, Format: "pdf", Link: "https://asas", Filename: "filename"})
 
 				if err != nil {
 					t.Errorf("Setup error. %v", err)

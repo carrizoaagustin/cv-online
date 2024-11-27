@@ -10,10 +10,11 @@ import (
 )
 
 type Resource struct {
-	ID     uuid.UUID
-	Format string
-	Link   string
-	UserID uuid.UUID
+	ID       uuid.UUID
+	Filename string
+	Format   string
+	Link     string
+	UserID   uuid.UUID
 }
 
 const (
@@ -28,7 +29,7 @@ func isValidFormat(format string) bool {
 	return slices.Contains(allowedFormats, format)
 }
 
-func NewResource(format string, link string) (*Resource, error) {
+func NewResource(filename string, format string, link string) (*Resource, error) {
 	if !isValidFormat(format) {
 		return nil, apperrors.NewValidationError(failures.ResourceInvalidFormatError, "format")
 	}
@@ -37,9 +38,14 @@ func NewResource(format string, link string) (*Resource, error) {
 		return nil, apperrors.NewValidationError(failures.ResourceInvalidLinkError, "link")
 	}
 
+	if filename == "" {
+		return nil, apperrors.NewValidationError(failures.ResourceInvalidFilenameError, "filename")
+	}
+
 	return &Resource{
-		ID:     uuid.New(),
-		Format: format,
-		Link:   link,
+		ID:       uuid.New(),
+		Filename: filename,
+		Format:   format,
+		Link:     link,
 	}, nil
 }

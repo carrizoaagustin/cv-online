@@ -8,6 +8,10 @@ var (
 		Message: "Invalid link",
 		Code:    "RESOURCE_INVALID_LINK",
 	}
+	ResourceInvalidFilenameError = apperrors.ErrorContent{
+		Message: "Invalid filaname",
+		Code:    "RESOURCE_INVALID_FILENAME",
+	}
 	ResourceInvalidFormatError = apperrors.ErrorContent{
 		Message: "Invalid format. Only allow pdf, jpeg, png and gif formats",
 		Code:    "RESOURCE_INVALID_FORMAT",
