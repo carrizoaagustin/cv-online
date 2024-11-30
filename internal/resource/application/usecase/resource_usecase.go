@@ -9,17 +9,16 @@ import (
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/failures"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/model"
-	"github.com/carrizoaagustin/cv-online/internal/resource/domain/service"
 	"github.com/carrizoaagustin/cv-online/pkg/apperrors"
 )
 
 type ResourceUseCase struct {
-	resourceService    service.ResourceService
+	resourceService    domain.ResourceService
 	fileStorageService domain.FileStorageService
 	config             config.ResourceConfig
 }
 
-func NewResourceUseCase(config config.ResourceConfig, fileStorageService domain.FileStorageService, resourceService service.ResourceService) application.ResourceUseCase { //nolint:lll
+func NewResourceUseCase(config config.ResourceConfig, fileStorageService domain.FileStorageService, resourceService domain.ResourceService) application.ResourceUseCase { //nolint:lll
 	return &ResourceUseCase{
 		config:             config,
 		fileStorageService: fileStorageService,
