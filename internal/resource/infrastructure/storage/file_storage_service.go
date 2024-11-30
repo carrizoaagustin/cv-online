@@ -74,7 +74,7 @@ func (fs *FileStorageServiceR2) UploadFile(fileInput model.FileInput) (string, e
 
 	input := &s3.PutObjectInput{
 		Bucket:      aws.String(fs.config.Bucket),
-		Key:         aws.String(fileInput.Filename),
+		Key:         aws.String(key),
 		Body:        bytes.NewReader(fileInput.File),
 		ContentType: aws.String(fileInput.ContentType),
 	}
