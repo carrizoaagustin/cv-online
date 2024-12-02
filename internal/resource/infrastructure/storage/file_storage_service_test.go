@@ -7,23 +7,24 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
+	r2 "github.com/aws/aws-sdk-go-v2/service/s3"
 
 	"github.com/carrizoaagustin/cv-online/config"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/model"
 	"github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/storage"
 )
 
-type MockClientS3 struct {
+type MockClientR2 struct {
 	mock.Mock
 }
 
-func (m *MockClientS3) PutObject(ctx context.Context, input *s3.PutObjectInput, opts ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
+func (m *MockClientR2) PutObject(ctx context.Context, input *r2.PutObjectInput, opts ...func(*r2.Options)) (*r2.PutObjectOutput, error) {
 	args := m.Called(ctx, input, opts)
 
-	return args.Get(0).(*s3.PutObjectOutput), args.Error(1)
+	return args.Get(0).(*r2.PutObjectOutput), args.Error(1)
 }
 
 func TestUploadFile(t *testing.T) {
@@ -133,12 +134,12 @@ func TestUploadFile(t *testing.T) {
 
 	for name, caseData := range testCases {
 		t.Run(name, func(t *testing.T) {
-			mockS3 := new(MockClientS3)
+			mockS3 := new(MockClientR2)
 			fileStorage := storage.NewFileStorageServiceR2(cfg, mockS3)
 
 			mockS3.
 				On("PutObject", mock.Anything, mock.Anything, mock.Anything).
-				Return(&s3.PutObjectOutput{}, caseData.given.mockValue)
+				Return(&r2.PutObjectOutput{}, caseData.given.mockValue)
 
 			key, err := fileStorage.UploadFile(caseData.given.fileInput)
 
