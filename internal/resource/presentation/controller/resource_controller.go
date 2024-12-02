@@ -1,11 +1,13 @@
 package controller
 
 import (
+	"io"
+
 	"bytes"
+	"github.com/gin-gonic/gin"
+
 	"github.com/carrizoaagustin/cv-online/internal/resource/application"
 	"github.com/carrizoaagustin/cv-online/internal/resource/application/dto"
-	"github.com/gin-gonic/gin"
-	"io"
 )
 
 type ResourceController struct {
