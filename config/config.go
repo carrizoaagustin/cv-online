@@ -21,6 +21,13 @@ type App struct {
 	PORT            string `env:"APP_PORT" envDefault:"8000"`
 }
 
+type StorageR2 struct {
+	AccountID string `env:"R2_ACCOUNT_ID"`
+	AccessKey string `env:"R2_ACCESS_KEY"`
+	SecretKey string `env:"R2_SECRET_KEY"`
+	Bucket    string `env:"R2_BUCKET_NAME"`
+}
+
 type config struct {
 	DatabaseConfig
 	App

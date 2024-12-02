@@ -189,6 +189,9 @@ linters-settings:
     # Default: false
     require-specific: true
 
+  lll:
+    line-length: 150
+
   perfsprint:
     # Optimizes into strings concatenation.
     # Default: true
