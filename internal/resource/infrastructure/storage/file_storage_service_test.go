@@ -7,9 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	r2 "github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
+	r2 "github.com/aws/aws-sdk-go-v2/service/s3"
 
 	"github.com/carrizoaagustin/cv-online/config"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
