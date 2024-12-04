@@ -1,14 +1,19 @@
 package main
 
 import (
+	"github.com/carrizoaagustin/cv-online/internal/resource/application/usecase"
+	"github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/storage"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 
 	"github.com/carrizoaagustin/cv-online/config"
-	resource_repository "github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/repository"
 	"github.com/carrizoaagustin/cv-online/pkg/dbconnection"
 	"github.com/carrizoaagustin/cv-online/pkg/dbquerybuilder"
+
+	resource_service "github.com/carrizoaagustin/cv-online/internal/resource/domain/service"
+	resource_repository "github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/repository"
+	resource_controller "github.com/carrizoaagustin/cv-online/internal/resource/presentation/controller"
 )
 
 func main() {
@@ -22,7 +27,13 @@ func main() {
 
 	// INIT OBJECTS
 	queryBuilder := dbquerybuilder.New(databaseConnection.GetDatabaseConnection())
-	resource_repository.NewResourceRepository(queryBuilder)
+
+	// FILE STORAGE SERVICE
+
+	// RESOURCES
+	resourceRepository := resource_repository.NewResourceRepository(queryBuilder)
+
+	resource_service.NewResourceService(resourceRepository)
 
 	// INIT ROUTER
 

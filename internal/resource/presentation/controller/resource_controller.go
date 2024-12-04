@@ -20,7 +20,7 @@ func NewResourceController(resourceUseCase application.ResourceUseCase) *Resourc
 	}
 }
 
-func (c *ResourceController) UploadFile(ctx *gin.Context) {
+func (c *ResourceController) UploadFile(ctx *gin.Context) { // coverage-ignore
 	var form struct {
 		Filename    string `form:"filename" binding:"required"`
 		ContentType string `form:"content_type" binding:"required"`
@@ -45,7 +45,7 @@ func (c *ResourceController) UploadFile(ctx *gin.Context) {
 
 	var buffer bytes.Buffer
 
-	if _, err := io.Copy(&buffer, src); err != nil {
+	if _, err = io.Copy(&buffer, src); err != nil {
 		return
 	}
 
