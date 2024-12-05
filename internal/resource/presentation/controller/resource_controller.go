@@ -26,18 +26,21 @@ func (c *ResourceController) UploadFile(ctx *gin.Context) { // coverage-ignore
 		ContentType string `form:"content_type" binding:"required"`
 	}
 
-	err := ctx.ShouldBind(&form)
+	err := ctx.Bind(&form)
 	if err != nil {
+		ctx.Error(err)
 		return
 	}
 
 	file, err := ctx.FormFile("file")
 	if err != nil {
+		ctx.Error(err)
 		return
 	}
 
 	src, err := file.Open()
 	if err != nil {
+		ctx.Error(err)
 		return
 	}
 
@@ -46,6 +49,7 @@ func (c *ResourceController) UploadFile(ctx *gin.Context) { // coverage-ignore
 	var buffer bytes.Buffer
 
 	if _, err = io.Copy(&buffer, src); err != nil {
+		ctx.Error(err)
 		return
 	}
 
@@ -57,6 +61,7 @@ func (c *ResourceController) UploadFile(ctx *gin.Context) { // coverage-ignore
 
 	err = c.resourceUseCase.UploadResource(input)
 	if err != nil {
+		ctx.Error(err)
 		return
 	}
 

@@ -6,8 +6,8 @@ import (
 	"github.com/carrizoaagustin/cv-online/internal/resource/presentation/controller"
 )
 
-func RegisterRoutes(router *gin.RouterGroup, controller controller.ResourceController) {
+func RegisterRoutes(router *gin.RouterGroup, controller *controller.ResourceController) {
 	contextGroup := router.Group("/resources")
 
-	contextGroup.POST("/", controller.UploadFile)
+	contextGroup.POST("", controller.UploadFile)
 }
