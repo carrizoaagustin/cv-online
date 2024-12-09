@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
+	"github.com/carrizoaagustin/cv-online/internal/resource/domain/model"
 	"github.com/carrizoaagustin/cv-online/pkg/dbquerybuilder"
 )
 
@@ -15,7 +16,7 @@ func NewResourceRepository(queryBuilder *dbquerybuilder.DBQueryBuilder) domain.R
 	}
 }
 
-func (r *ResourceRepositoryDB) Create(resource domain.Resource) error {
+func (r *ResourceRepositoryDB) Create(resource model.Resource) error {
 	// USE EXAMPLE FOR MIGUEL
 	_, err := r.queryBuilder.
 		StartQuery().

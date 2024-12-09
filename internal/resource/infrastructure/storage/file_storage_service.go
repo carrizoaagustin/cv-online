@@ -16,6 +16,7 @@ import (
 
 	"github.com/carrizoaagustin/cv-online/config"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
+	"github.com/carrizoaagustin/cv-online/internal/resource/domain/model"
 )
 
 const ErrorMessageInvalidFile string = "invalid file"
@@ -54,7 +55,7 @@ func NewFileStorageServiceR2(config config.StorageR2, client R2Client) domain.Fi
 	}
 }
 
-func (fs *FileStorageServiceR2) UploadFile(fileInput domain.FileInput) (string, error) {
+func (fs *FileStorageServiceR2) UploadFile(fileInput model.FileInput) (string, error) {
 	if len(fileInput.File) == 0 {
 		return "", errors.New(ErrorMessageInvalidFile)
 	}

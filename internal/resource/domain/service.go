@@ -1,9 +1,14 @@
 package domain
 
+import (
+	"github.com/carrizoaagustin/cv-online/internal/resource/domain/dto"
+	"github.com/carrizoaagustin/cv-online/internal/resource/domain/model"
+)
+
 type ResourceService interface {
-	Create(resource Resource) error
+	Create(resource dto.CreateResourceData) error
 }
 
 type FileStorageService interface {
-	UploadFile(file FileInput) (string, error)
+	UploadFile(file model.FileInput) (string, error)
 }
