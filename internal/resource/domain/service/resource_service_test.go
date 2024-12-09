@@ -1,4 +1,4 @@
-package services_test
+package service_test
 
 import (
 	"errors"
@@ -10,7 +10,7 @@ import (
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/dto"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/failures"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/model"
-	"github.com/carrizoaagustin/cv-online/internal/resource/domain/services"
+	"github.com/carrizoaagustin/cv-online/internal/resource/domain/service"
 	"github.com/carrizoaagustin/cv-online/pkg/apperrors"
 )
 
@@ -41,8 +41,9 @@ func TestResourceService(t *testing.T) {
 		"Creation success": {
 			given: Given{
 				createResourceData: dto.CreateResourceData{
-					Link:   "https://test.image.com/image",
-					Format: model.Pdf,
+					Link:     "https://test.image.com/image",
+					Format:   model.Pdf,
+					Filename: "test.pdf",
 				},
 				mockValue: nil,
 			},
@@ -53,8 +54,9 @@ func TestResourceService(t *testing.T) {
 		"Invalid format": {
 			given: Given{
 				createResourceData: dto.CreateResourceData{
-					Link:   "https://test.image.com/image",
-					Format: "invalid",
+					Link:     "https://test.image.com/image",
+					Format:   "invalid",
+					Filename: "test.pdf",
 				},
 				mockValue: nil,
 			},
@@ -65,8 +67,9 @@ func TestResourceService(t *testing.T) {
 		"format empty": {
 			given: Given{
 				createResourceData: dto.CreateResourceData{
-					Link:   "https://test.image.com/image",
-					Format: "",
+					Link:     "https://test.image.com/image",
+					Format:   "",
+					Filename: "test.pdf",
 				},
 				mockValue: nil,
 			},
@@ -77,8 +80,9 @@ func TestResourceService(t *testing.T) {
 		"Invalid link": {
 			given: Given{
 				createResourceData: dto.CreateResourceData{
-					Link:   "",
-					Format: model.Pdf,
+					Link:     "",
+					Format:   model.Pdf,
+					Filename: "test.pdf",
 				},
 				mockValue: nil,
 			},
@@ -86,11 +90,25 @@ func TestResourceService(t *testing.T) {
 				err: apperrors.NewValidationError(failures.ResourceInvalidLinkError, "link"),
 			},
 		},
+		"Invalid filename": {
+			given: Given{
+				createResourceData: dto.CreateResourceData{
+					Link:     "https://test.image.com/image",
+					Format:   model.Pdf,
+					Filename: "",
+				},
+				mockValue: nil,
+			},
+			expected: Expected{
+				err: apperrors.NewValidationError(failures.ResourceInvalidFilenameError, "filename"),
+			},
+		},
 		"Repository error": {
 			given: Given{
 				createResourceData: dto.CreateResourceData{
-					Link:   "https://test.image.com/image",
-					Format: model.Pdf,
+					Link:     "https://test.image.com/image",
+					Format:   model.Pdf,
+					Filename: "filename",
 				},
 				mockValue: errors.New("test"),
 			},
@@ -103,18 +121,16 @@ func TestResourceService(t *testing.T) {
 	for name, caseData := range testCases {
 		t.Run(name, func(t *testing.T) {
 			mockRepository := new(MockResourceRepository)
-			resourceService := services.NewResourceService(mockRepository)
+			resourceService := service.NewResourceService(mockRepository)
 			mockRepository.
 				On("Create", mock.Anything).
 				Return(caseData.given.mockValue)
 
-			err := resourceService.Create(caseData.given.createResourceData)
+			_, err := resourceService.Create(caseData.given.createResourceData)
 
 			if caseData.expected.err == nil {
-				// Caso de éxito: verificar que no haya error
 				require.NoError(t, err, "Expected no error but got one")
 			} else {
-				// Caso de fallo: verificar el error esperado
 				require.IsType(t, err, caseData.expected.err, "Error type don't match")
 				require.EqualError(t, err, caseData.expected.err.Error(), "Error don't match")
 			}

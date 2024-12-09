@@ -28,9 +28,16 @@ type StorageR2 struct {
 	Bucket    string `env:"R2_BUCKET_NAME"`
 }
 
+type ResourceConfig struct {
+	BaseFolder string `env:"RESOURCE_BASE_FOLDER"`
+	BaseURL    string `env:"RESOURCE_BASE_URL"`
+}
+
 type config struct {
 	DatabaseConfig
 	App
+	StorageR2
+	ResourceConfig
 }
 
 const (

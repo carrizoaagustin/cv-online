@@ -21,7 +21,7 @@ func (r *ResourceRepositoryDB) Create(resource model.Resource) error {
 	_, err := r.queryBuilder.
 		StartQuery().
 		Insert("resources").
-		Rows(dbquerybuilder.Record{"resource_id": resource.ID, "format": resource.Format, "link": resource.Link}).
+		Rows(dbquerybuilder.Record{"resource_id": resource.ID, "filename": resource.Filename, "format": resource.Format, "link": resource.Link}).
 		Executor().
 		Exec()
 

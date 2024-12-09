@@ -1,6 +1,7 @@
 package dto
 
 type CreateResourceData struct {
-	Format string
-	Link   string
+	Filename string
+	Format   string
+	Link     string
 }

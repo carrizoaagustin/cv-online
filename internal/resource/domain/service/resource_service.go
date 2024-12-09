@@ -1,4 +1,4 @@
-package services
+package service
 
 import (
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
@@ -18,16 +18,16 @@ func NewResourceService(repository domain.ResourceRepository) domain.ResourceSer
 	}
 }
 
-func (s *ResourceService) Create(data dto.CreateResourceData) error {
-	resource, err := model.NewResource(data.Format, data.Link)
+func (s *ResourceService) Create(data dto.CreateResourceData) (*model.Resource, error) {
+	resource, err := model.NewResource(data.Filename, data.Format, data.Link)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = s.resourceRepository.Create(*resource)
 	if err != nil {
-		return apperrors.NewInternalError(failures.ResourceCreationUnexpectedError)
+		return nil, apperrors.NewInternalError(failures.ResourceCreationUnexpectedError)
 	}
 
-	return nil
+	return resource, nil
 }
