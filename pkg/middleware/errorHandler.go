@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"net/http"
 	"unicode"
 
@@ -32,39 +33,45 @@ func ErrorHandler() gin.HandlerFunc {
 		c.Next()
 
 		if len(c.Errors) > 0 {
-			validationErrors := make(gin.H, 0)
+			validationErrors := make(gin.H)
 
 			for _, err := range c.Errors {
-				switch e := err.Err.(type) {
-				case *apperrors.ValidationError:
-					validationErrors[camelCaseToSnakeCase(e.Field)] = ErrorResponse{
-						Code:    e.Code,
-						Message: e.Message,
+				var validationErr *apperrors.ValidationError
+				var notFoundErr *apperrors.NotFoundError
+				var permissionsErr *apperrors.PermissionsError
+				var unauthorizedErr *apperrors.UnauthorizedError
+				var internalErr *apperrors.InternalError
+
+				switch {
+				case errors.As(err.Err, &validationErr):
+					validationErrors[camelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
+						Code:    validationErr.Code,
+						Message: validationErr.Message,
 					}
 
-				case *apperrors.NotFoundError:
+				case errors.As(err.Err, &notFoundErr):
 					c.AbortWithStatusJSON(http.StatusNotFound, ErrorResponse{
-						Code:    e.Code,
-						Message: e.Message,
+						Code:    notFoundErr.Code,
+						Message: notFoundErr.Message,
 					})
 
-				case *apperrors.PermissionsError:
+				case errors.As(err.Err, &permissionsErr):
 					c.AbortWithStatusJSON(http.StatusForbidden, ErrorResponse{
-						Code:    e.Code,
-						Message: e.Message,
+						Code:    permissionsErr.Code,
+						Message: permissionsErr.Message,
 					})
 
-				case *apperrors.UnauthorizedError:
+				case errors.As(err.Err, &unauthorizedErr):
 					c.AbortWithStatusJSON(http.StatusUnauthorized, ErrorResponse{
-						Code:    e.Code,
-						Message: e.Message,
+						Code:    unauthorizedErr.Code,
+						Message: unauthorizedErr.Message,
 					})
 
-				case *apperrors.InternalError:
+				case errors.As(err.Err, &internalErr):
 					// ADD LOG
 					c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorResponse{
-						Code:    e.Code,
-						Message: e.Message,
+						Code:    internalErr.Code,
+						Message: internalErr.Message,
 					})
 
 				default:

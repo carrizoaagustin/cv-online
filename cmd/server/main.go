@@ -1,19 +1,18 @@
 package main
 
 import (
-	"github.com/carrizoaagustin/cv-online/pkg/middleware"
 	"github.com/gin-gonic/gin"
 
 	"github.com/carrizoaagustin/cv-online/config"
-	"github.com/carrizoaagustin/cv-online/pkg/dbconnection"
-	"github.com/carrizoaagustin/cv-online/pkg/dbquerybuilder"
-
 	resource_usecase "github.com/carrizoaagustin/cv-online/internal/resource/application/usecase"
 	resource_service "github.com/carrizoaagustin/cv-online/internal/resource/domain/service"
 	resource_repository "github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/repository"
 	resource_storage "github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/storage"
 	resource_controller "github.com/carrizoaagustin/cv-online/internal/resource/presentation/controller"
 	resource_router "github.com/carrizoaagustin/cv-online/internal/resource/presentation/router"
+	"github.com/carrizoaagustin/cv-online/pkg/dbconnection"
+	"github.com/carrizoaagustin/cv-online/pkg/dbquerybuilder"
+	"github.com/carrizoaagustin/cv-online/pkg/middleware"
 )
 
 func main() {

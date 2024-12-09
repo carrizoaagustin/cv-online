@@ -1,9 +1,9 @@
 package controller
 
 import (
+	"bytes"
 	"io"
 
-	"bytes"
 	"github.com/gin-gonic/gin"
 
 	"github.com/carrizoaagustin/cv-online/internal/resource/application"
@@ -64,5 +64,4 @@ func (c *ResourceController) UploadFile(ctx *gin.Context) { // coverage-ignore
 		ctx.Error(err)
 		return
 	}
-
 }
