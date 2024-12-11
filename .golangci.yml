@@ -30,8 +30,6 @@ linters-settings:
     # Such cases aren't reported by default.
     # Default: false
     check-type-assertions: true
-    exclude-functions:
-      - (*gin.Context).Error
 
   exhaustive:
     # Program elements to check for exhaustiveness.
@@ -360,7 +358,7 @@ issues:
       linters: [ godot ]
     - source: "//noinspection"
       linters: [ gocritic ]
-    - path: "_test\\.go"
+    - path: '(.+)_test\.go'
       linters:
         - bodyclose
         - dupl
@@ -370,3 +368,6 @@ issues:
         - noctx
         - wrapcheck
         - errcheck
+    - path: '(.+)_controller\.go'
+      linters:
+          - errcheck
