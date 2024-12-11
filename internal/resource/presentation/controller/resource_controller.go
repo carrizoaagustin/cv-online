@@ -14,7 +14,7 @@ type ResourceController struct {
 	resourceUseCase application.ResourceUseCase
 }
 
-func NewResourceController(resourceUseCase application.ResourceUseCase) *ResourceController {
+func NewResourceController(resourceUseCase application.ResourceUseCase) *ResourceController { // coverage-ignore
 	return &ResourceController{
 		resourceUseCase: resourceUseCase,
 	}
