@@ -5,9 +5,15 @@ meta {
 }
 
 post {
-  url: {{baseUrl}}/api/resources/
-  body: none
+  url: {{baseUrl}}/api/resources
+  body: multipartForm
   auth: none
+}
+
+body:multipart-form {
+  file: @file(/home/pichi/Downloads/PichiCommissionBase.png)
+  filename: pichi.png
+  content_type: image/png
 }
 
 docs {
