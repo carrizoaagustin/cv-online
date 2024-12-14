@@ -44,11 +44,25 @@ func ErrorHandler() gin.HandlerFunc {
 
 				switch {
 				case errors.As(err.Err, &validationErr):
-					validationErrors[camelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
-						Code:    validationErr.Code,
-						Message: validationErr.Message,
+					u, ok := err.Err.(interface {
+						Unwrap() []error
+					})
+					if !ok {
+						validationErrors[camelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
+							Code:    validationErr.Code,
+							Message: validationErr.Message,
+						}
 					}
 
+					for _, errorCustom := range u.Unwrap() {
+						if errors.As(errorCustom, &validationErr) {
+							validationErrors[camelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
+								Code:    validationErr.Code,
+								Message: validationErr.Message,
+							}
+						}
+
+					}
 				case errors.As(err.Err, &notFoundErr):
 					c.AbortWithStatusJSON(http.StatusNotFound, ErrorResponse{
 						Code:    notFoundErr.Code,
