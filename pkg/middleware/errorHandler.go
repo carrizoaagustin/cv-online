@@ -51,15 +51,12 @@ func extractValidationErrors(err error) gin.H {
 				Message: validationErr.Message,
 			}
 		}
-
 	}
 	return validationErrors
 }
-
 func ErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
-
 		if len(c.Errors) > 0 {
 			var validationErrors gin.H
 
@@ -71,40 +68,47 @@ func ErrorHandler() gin.HandlerFunc {
 				var internalErr *apperrors.InternalError
 
 				switch {
-				case errors.As(err.Err, &validationErr):
-					validationErrors = extractValidationErrors(err.Err)
 
 				case errors.As(err.Err, &notFoundErr):
 					c.AbortWithStatusJSON(http.StatusNotFound, ErrorResponse{
 						Code:    notFoundErr.Code,
 						Message: notFoundErr.Message,
 					})
+					return
 
 				case errors.As(err.Err, &permissionsErr):
 					c.AbortWithStatusJSON(http.StatusForbidden, ErrorResponse{
 						Code:    permissionsErr.Code,
 						Message: permissionsErr.Message,
 					})
+					return
 
 				case errors.As(err.Err, &unauthorizedErr):
 					c.AbortWithStatusJSON(http.StatusUnauthorized, ErrorResponse{
 						Code:    unauthorizedErr.Code,
 						Message: unauthorizedErr.Message,
 					})
+					return
 
 				case errors.As(err.Err, &internalErr):
 					// ADD LOG
-					c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorResponse{
+					c.AbortWithStatusJSON(http.StatusForbidden, ErrorResponse{
 						Code:    internalErr.Code,
 						Message: internalErr.Message,
 					})
+					return
+
+				case errors.As(err.Err, &validationErr):
+					validationErrors = extractValidationErrors(err.Err)
+					return
 
 				default:
 					// ADD LOG
-					c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorResponse{
+					c.AbortWithStatusJSON(http.StatusForbidden, ErrorResponse{
 						Code:    "UNKNOWN_ERROR",
-						Message: "u.",
+						Message: "unexpected error",
 					})
+					return
 				}
 			}
 
@@ -114,6 +118,7 @@ func ErrorHandler() gin.HandlerFunc {
 					Message: "Invalid fields. Please check details.",
 					Details: validationErrors,
 				})
+				return
 			}
 		}
 	}
