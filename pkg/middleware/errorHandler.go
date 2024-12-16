@@ -28,12 +28,40 @@ func camelCaseToSnakeCase(s string) string {
 	return string(result)
 }
 
+func extractValidationErrors(err error) gin.H {
+	validationErrors := make(gin.H)
+
+	u, ok := err.(interface {
+		Unwrap() []error
+	})
+
+	var validationErr *apperrors.ValidationError
+
+	if !ok && errors.As(err, &validationErr) {
+		validationErrors[camelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
+			Code:    validationErr.Code,
+			Message: validationErr.Message,
+		}
+	}
+
+	for _, errorCustom := range u.Unwrap() {
+		if errors.As(errorCustom, &validationErr) {
+			validationErrors[camelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
+				Code:    validationErr.Code,
+				Message: validationErr.Message,
+			}
+		}
+
+	}
+	return validationErrors
+}
+
 func ErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
 		if len(c.Errors) > 0 {
-			validationErrors := make(gin.H)
+			var validationErrors gin.H
 
 			for _, err := range c.Errors {
 				var validationErr *apperrors.ValidationError
@@ -44,25 +72,8 @@ func ErrorHandler() gin.HandlerFunc {
 
 				switch {
 				case errors.As(err.Err, &validationErr):
-					u, ok := err.Err.(interface {
-						Unwrap() []error
-					})
-					if !ok {
-						validationErrors[camelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
-							Code:    validationErr.Code,
-							Message: validationErr.Message,
-						}
-					}
+					validationErrors = extractValidationErrors(err.Err)
 
-					for _, errorCustom := range u.Unwrap() {
-						if errors.As(errorCustom, &validationErr) {
-							validationErrors[camelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
-								Code:    validationErr.Code,
-								Message: validationErr.Message,
-							}
-						}
-
-					}
 				case errors.As(err.Err, &notFoundErr):
 					c.AbortWithStatusJSON(http.StatusNotFound, ErrorResponse{
 						Code:    notFoundErr.Code,
