@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"slices"
 
 	"github.com/google/uuid"
@@ -30,16 +31,22 @@ func isValidFormat(format string) bool {
 }
 
 func NewResource(filename string, format string, link string) (*Resource, error) {
+	var errs []error
+
 	if !isValidFormat(format) {
-		return nil, apperrors.NewValidationError(failures.ResourceInvalidFormatError, "format")
+		errs = append(errs, apperrors.NewValidationError(failures.ResourceInvalidFormatError, "format"))
 	}
 
 	if link == "" {
-		return nil, apperrors.NewValidationError(failures.ResourceInvalidLinkError, "link")
+		errs = append(errs, apperrors.NewValidationError(failures.ResourceInvalidLinkError, "link"))
 	}
 
 	if filename == "" {
-		return nil, apperrors.NewValidationError(failures.ResourceInvalidFilenameError, "filename")
+		errs = append(errs, apperrors.NewValidationError(failures.ResourceInvalidFilenameError, "filename"))
+	}
+
+	if len(errs) > 0 {
+		return nil, errors.Join(errs...)
 	}
 
 	return &Resource{
