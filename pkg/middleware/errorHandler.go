@@ -74,7 +74,6 @@ func extractPlaygroundValidationErrors(err error) gin.H {
 	}
 
 	return playgroundErrors
-
 }
 
 func ErrorHandler() gin.HandlerFunc {

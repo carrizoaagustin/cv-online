@@ -2,8 +2,8 @@ package middleware
 
 import "fmt"
 
-// key -> tag
-var playgroundMapper = map[string]struct { //nolint:gochecknoglobals because I need a private global var
+//nolint:gochecknoglobals //i only can access this var in middleware package
+var playgroundMapper = map[string]struct {
 	Code    string
 	Message string
 }{
