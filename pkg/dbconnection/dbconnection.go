@@ -38,7 +38,8 @@ func (dbs *DatabaseConnection) Connect() {
 }
 
 func (dbs *DatabaseConnection) CreateSchema() {
-	db, err := sql.Open("postgres", fmt.Sprintf("%s?sslmode=%s", dbs.dbConfig.URL, dbs.dbConfig.SSLMode))
+	url := fmt.Sprintf("%s?sslmode=%s", dbs.dbConfig.URL, dbs.dbConfig.SSLMode)
+	db, err := sql.Open("postgres", url)
 
 	if err != nil {
 		log.Fatalf("Error DB connection: %v", err)

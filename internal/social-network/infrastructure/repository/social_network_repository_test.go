@@ -1,10 +1,8 @@
 package repository_test
 
 import (
-	"os"
 	"testing"
 
-	"github.com/doug-martin/goqu/v9"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
@@ -12,20 +10,6 @@ import (
 	"github.com/carrizoaagustin/cv-online/internal/social-network/infrastructure/repository"
 	"github.com/carrizoaagustin/cv-online/testutils"
 )
-
-//nolint:gochecknoglobals //i didn't found an alternative way
-var dbResources *testutils.TestDBResources
-
-func TestMain(m *testing.M) {
-	dbResources = testutils.InitTestDBResources()
-
-	// Ejecutar los tests
-	code := m.Run()
-
-	testutils.CloseTestDBResources(dbResources)
-
-	os.Exit(code)
-}
 
 func TestInsertSocialNetwork(t *testing.T) {
 	type Given struct {
@@ -66,19 +50,18 @@ func TestInsertSocialNetwork(t *testing.T) {
 		},
 	}
 
+	psqlContainer := testutils.StartPSQLContainer()
+	defer psqlContainer.Stop()
+
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
+			testSchema := psqlContainer.StartTestSchema(uuid.NewString())
+
 			t.Cleanup(func() {
-				_, err := dbResources.DBquerybuilder.StartQuery().
-					Delete("social_networks").
-					Where(goqu.C("social_network_id").Eq(test.given.socialNetwork.ID)).
-					Executor().Exec()
-				if err != nil {
-					t.Errorf("Error cleaning social_networks table")
-				}
+				testSchema.CloseConnection()
 			})
 
-			socialNetworkRepository := repository.NewSocialNetworkRepository(dbResources.DBquerybuilder)
+			socialNetworkRepository := repository.NewSocialNetworkRepository(testSchema.GetQueryBuilder())
 
 			if test.setup != nil {
 				test.setup(socialNetworkRepository)

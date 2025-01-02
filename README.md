@@ -31,6 +31,11 @@ for example: `go get github.com/gin-gonic/gin`
 
 obs: delete the last migration applied
 
+### LINT
+
+#### RUN LINTER
+`make lint`
+
 ### TESTING
 
 #### RUN TESTS
