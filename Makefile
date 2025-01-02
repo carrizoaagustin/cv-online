@@ -13,6 +13,10 @@ install-tools:
 	go install github.com/vladopajic/go-test-coverage/v2@latest
 	go install github.com/pressly/goose/v3/cmd/goose@latest
 
+.PHONY: lint
+lint:
+	golangci-lint run
+
 .PHONY: run
 run:
 	go run ./cmd/server
