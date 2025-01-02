@@ -13,25 +13,12 @@ install-tools:
 	go install github.com/vladopajic/go-test-coverage/v2@latest
 	go install github.com/pressly/goose/v3/cmd/goose@latest
 
-.PHONY: init
-init:
+.PHONY: run
+run:
 	go run ./cmd/server
-
-.PHONY: pre-test
-pre-test:
-
-	go run ./cmd/pre_tests
-
-.PHONY: post-test
-post-test:
-	go run ./cmd/post_tests
 
 .PHONY: test
 test:
-	@echo ""
-	@echo "---PREPARE TESTS---"
-	@echo ""
-	$(MAKE) pre-test
 	@echo ""
 	@echo "---TESTING---"
 	@echo ""
@@ -41,9 +28,6 @@ test:
 	@echo ""
 	${GOBIN}/go-test-coverage --config=./.testcoverage.yml
 	@echo ""
-	@echo "---CLEAN TESTS---"
-	@echo ""
-	$(MAKE) post-test
 
 .PHONY: cover
 cover:
