@@ -1,10 +1,8 @@
 package repository_test
 
 import (
-	"os"
 	"testing"
 
-	"github.com/doug-martin/goqu/v9"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
@@ -13,20 +11,6 @@ import (
 	"github.com/carrizoaagustin/cv-online/internal/resource/infrastructure/repository"
 	"github.com/carrizoaagustin/cv-online/testutils"
 )
-
-//nolint:gochecknoglobals //i didn't found an alternative way
-var dbResources *testutils.TestDBResources
-
-func TestMain(m *testing.M) {
-	dbResources = testutils.InitTestDBResources()
-
-	// Ejecutar los tests
-	code := m.Run()
-
-	testutils.CloseTestDBResources(dbResources)
-
-	os.Exit(code)
-}
 
 func TestInsertResource(t *testing.T) {
 	type Given struct {
@@ -67,20 +51,18 @@ func TestInsertResource(t *testing.T) {
 		},
 	}
 
+	psqlContainer := testutils.StartPSQLContainer()
+	defer psqlContainer.Stop()
+
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			t.Cleanup(func() {
-				_, err := dbResources.DBquerybuilder.StartQuery().
-					Delete("resources").
-					Where(goqu.C("resource_id").Eq(test.given.resource.ID)).
-					Executor().Exec()
+			testSchema := psqlContainer.StartTestSchema(uuid.NewString())
 
-				if err != nil {
-					t.Errorf("Error cleaning resources table")
-				}
+			t.Cleanup(func() {
+				testSchema.CloseConnection()
 			})
 
-			resourceRepository := repository.NewResourceRepository(dbResources.DBquerybuilder)
+			resourceRepository := repository.NewResourceRepository(testSchema.GetQueryBuilder())
 
 			if test.setup != nil {
 				test.setup(resourceRepository)

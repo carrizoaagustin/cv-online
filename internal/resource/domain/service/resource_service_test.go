@@ -103,6 +103,23 @@ func TestResourceService(t *testing.T) {
 				err: apperrors.NewValidationError(failures.ResourceInvalidFilenameError, "filename"),
 			},
 		},
+		"Multiple invalid fields": {
+			given: Given{
+				createResourceData: dto.CreateResourceData{
+					Link:     "",
+					Format:   "invalid format",
+					Filename: "",
+				},
+				mockValue: nil,
+			},
+			expected: Expected{
+				err: errors.Join(
+					apperrors.NewValidationError(failures.ResourceInvalidFilenameError, "filename"),
+					apperrors.NewValidationError(failures.ResourceInvalidFormatError, "format"),
+					apperrors.NewValidationError(failures.ResourceInvalidLinkError, "link"),
+				),
+			},
+		},
 		"Repository error": {
 			given: Given{
 				createResourceData: dto.CreateResourceData{
@@ -131,8 +148,15 @@ func TestResourceService(t *testing.T) {
 			if caseData.expected.err == nil {
 				require.NoError(t, err, "Expected no error but got one")
 			} else {
-				require.IsType(t, err, caseData.expected.err, "Error type don't match")
-				require.EqualError(t, err, caseData.expected.err.Error(), "Error don't match")
+				require.Error(t, err)
+
+				if joinedErr, ok := caseData.expected.err.(interface{ Unwrap() []error }); ok {
+					for _, expectedErr := range joinedErr.Unwrap() {
+						require.ErrorContains(t, err, expectedErr.Error(), "Expected error not found in error chain")
+					}
+				} else {
+					require.EqualError(t, err, caseData.expected.err.Error(), "Error message does not match")
+				}
 			}
 		})
 	}

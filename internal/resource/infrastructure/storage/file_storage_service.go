@@ -8,8 +8,8 @@ import (
 	"log"
 	"strings"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
-	"github.com/aws/aws-sdk-go/aws"
 
 	configAws "github.com/aws/aws-sdk-go-v2/config"
 	r2 "github.com/aws/aws-sdk-go-v2/service/s3"
