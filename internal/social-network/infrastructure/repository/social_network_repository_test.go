@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/carrizoaagustin/cv-online/internal/social-network/domain"
+	"github.com/carrizoaagustin/cv-online/internal/social-network/domain/model"
 	"github.com/carrizoaagustin/cv-online/internal/social-network/infrastructure/repository"
 	"github.com/carrizoaagustin/cv-online/testutils"
 )
@@ -29,7 +30,7 @@ func TestMain(m *testing.M) {
 
 func TestInsertSocialNetwork(t *testing.T) {
 	type Given struct {
-		socialNetwork domain.SocialNetwork
+		socialNetwork model.SocialNetwork
 	}
 
 	type Expected struct {
@@ -43,7 +44,7 @@ func TestInsertSocialNetwork(t *testing.T) {
 	}{
 		"Creation success": {
 			given: Given{
-				socialNetwork: domain.SocialNetwork{ID: uuid.New(), Name: "github"},
+				socialNetwork: model.SocialNetwork{ID: uuid.New(), Name: "github"},
 			},
 			expected: Expected{
 				wantErr: false,
@@ -51,13 +52,13 @@ func TestInsertSocialNetwork(t *testing.T) {
 		},
 		"Query error": {
 			given: Given{
-				socialNetwork: domain.SocialNetwork{ID: uuid.Nil, Name: "github"},
+				socialNetwork: model.SocialNetwork{ID: uuid.Nil, Name: "github"},
 			},
 			expected: Expected{
 				wantErr: true,
 			},
 			setup: func(socialNetworkRepository domain.SocialNetworkRepository) {
-				err := socialNetworkRepository.Create(domain.SocialNetwork{ID: uuid.Nil, Name: "github"})
+				err := socialNetworkRepository.Create(model.SocialNetwork{ID: uuid.Nil, Name: "github"})
 
 				if err != nil {
 					t.Errorf("Setup error. %v", err)

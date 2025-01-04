@@ -1,5 +1,9 @@
 package domain
 
+import (
+	"github.com/carrizoaagustin/cv-online/internal/social-network/domain/model"
+)
+
 type SocialNetworkRepository interface {
-	Create(socialNetWork SocialNetwork) error
+	Create(socialNetWork model.SocialNetwork) error
 }

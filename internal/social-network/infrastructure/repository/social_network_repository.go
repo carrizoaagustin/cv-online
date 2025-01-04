@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/carrizoaagustin/cv-online/internal/social-network/domain"
+	"github.com/carrizoaagustin/cv-online/internal/social-network/domain/model"
 	"github.com/carrizoaagustin/cv-online/pkg/dbquerybuilder"
 )
 
@@ -15,7 +16,7 @@ func NewSocialNetworkRepository(queryBuilder *dbquerybuilder.DBQueryBuilder) dom
 	}
 }
 
-func (r *SocialNetworkRepositoryDB) Create(socialNetwork domain.SocialNetwork) error {
+func (r *SocialNetworkRepositoryDB) Create(socialNetwork model.SocialNetwork) error {
 	// USE EXAMPLE FOR MIGUEL
 	_, err := r.queryBuilder.
 		StartQuery().
