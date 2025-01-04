@@ -31,3 +31,8 @@ func (r *ResourceRepositoryDB) Create(resource model.Resource) error {
 
 	return nil
 }
+
+func (r *ResourceRepositoryDB) Delete(resource model.Resource) error {
+	//TODO implement me
+	panic("implement me")
+}
