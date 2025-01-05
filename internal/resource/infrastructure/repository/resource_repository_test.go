@@ -184,7 +184,6 @@ func TestDeleteResource(t *testing.T) {
 }
 
 func TestFindResources(t *testing.T) {
-
 	type Expected struct {
 		totalResources int
 		wantErr        bool
