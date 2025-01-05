@@ -3,31 +3,18 @@ package middleware
 import (
 	"errors"
 	"net/http"
-	"strings"
-	"unicode"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 
 	"github.com/carrizoaagustin/cv-online/pkg/apperrors"
+	"github.com/carrizoaagustin/cv-online/pkg/casefmt"
 )
 
 type ErrorResponse struct {
 	Code    string `json:"code"`
 	Message string `json:"message"`
 	Details any    `json:"details,omitempty"`
-}
-
-func camelCaseToSnakeCase(s string) string {
-	var result []rune
-	for i, char := range s {
-		if unicode.IsUpper(char) && i > 0 {
-			result = append(result, '_', unicode.ToLower(char))
-		} else {
-			result = append(result, char)
-		}
-	}
-	return strings.ToLower(string(result))
 }
 
 func extractValidationErrors(err error) gin.H {
@@ -40,7 +27,7 @@ func extractValidationErrors(err error) gin.H {
 	var validationErr *apperrors.ValidationError
 
 	if !ok && errors.As(err, &validationErr) {
-		validationErrors[camelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
+		validationErrors[casefmt.CamelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
 			Code:    validationErr.Code,
 			Message: validationErr.Message,
 		}
@@ -48,7 +35,7 @@ func extractValidationErrors(err error) gin.H {
 
 	for _, errorCustom := range u.Unwrap() {
 		if errors.As(errorCustom, &validationErr) {
-			validationErrors[camelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
+			validationErrors[casefmt.CamelCaseToSnakeCase(validationErr.Field)] = ErrorResponse{
 				Code:    validationErr.Code,
 				Message: validationErr.Message,
 			}
@@ -66,7 +53,7 @@ func extractPlaygroundValidationErrors(err error) gin.H {
 		for _, fieldError := range playgroundValidation {
 			response := getPlaygroundMapper(fieldError.Tag(), fieldError.Param())
 
-			playgroundErrors[camelCaseToSnakeCase(fieldError.Field())] = ErrorResponse{
+			playgroundErrors[casefmt.CamelCaseToSnakeCase(fieldError.Field())] = ErrorResponse{
 				Code:    response.Code,
 				Message: response.Message,
 			}

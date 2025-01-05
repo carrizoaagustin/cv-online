@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
@@ -22,6 +23,21 @@ func (m *MockResourceRepository) Create(resource model.Resource) error {
 	args := m.Called(resource)
 
 	return args.Error(0)
+}
+func (m *MockResourceRepository) Delete(resource model.Resource) error {
+	args := m.Called(resource)
+
+	return args.Error(0)
+}
+
+func (m *MockResourceRepository) GetByID(id uuid.UUID) (bool, *model.Resource, error) {
+	args := m.Called(id)
+	return args.Bool(0), args.Get(1).(*model.Resource), args.Error(2)
+}
+
+func (m *MockResourceRepository) FindResources() ([]model.Resource, error) {
+	args := m.Called()
+	return args.Get(0).([]model.Resource), args.Error(1)
 }
 
 func TestResourceService(t *testing.T) {
