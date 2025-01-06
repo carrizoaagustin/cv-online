@@ -5,6 +5,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
@@ -19,6 +20,12 @@ import (
 
 type MockResourceService struct {
 	mock.Mock
+}
+
+func (m *MockResourceService) Delete(id uuid.UUID) error {
+	args := m.Called(id)
+
+	return args.Error(0)
 }
 
 func (m *MockResourceService) Create(resource dtodomain.CreateResourceData) (*model.Resource, error) {
@@ -116,6 +123,10 @@ func TestUploadResourceUseCase(t *testing.T) {
 			mockResourceService.
 				On("Create", mock.Anything).
 				Return(&model.Resource{}, caseData.given.mockValueResourceService)
+
+			mockResourceService.
+				On("Delete", mock.Anything).
+				Return(nil)
 
 			err := resourceUseCase.UploadResource(caseData.given.input)
 			if caseData.expected.err == nil {

@@ -1,6 +1,8 @@
 package service
 
 import (
+	"github.com/google/uuid"
+
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/dto"
 	"github.com/carrizoaagustin/cv-online/internal/resource/domain/failures"
@@ -26,8 +28,25 @@ func (s *ResourceService) Create(data dto.CreateResourceData) (*model.Resource, 
 
 	err = s.resourceRepository.Create(*resource)
 	if err != nil {
-		return nil, apperrors.NewInternalError(failures.ResourceCreationUnexpectedError)
+		return nil, apperrors.NewInternalError(failures.ResourceCreationError)
 	}
 
 	return resource, nil
+}
+
+func (s *ResourceService) Delete(id uuid.UUID) error {
+	found, resource, err := s.resourceRepository.GetByID(id)
+
+	if err != nil {
+		return apperrors.NewInternalError(failures.ResourceGetError)
+	}
+
+	if found {
+		err = s.resourceRepository.Delete(*resource)
+		if err != nil {
+			return apperrors.NewInternalError(failures.ResourceDeleteError)
+		}
+	}
+
+	return nil
 }

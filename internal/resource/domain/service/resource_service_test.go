@@ -32,7 +32,11 @@ func (m *MockResourceRepository) Delete(resource model.Resource) error {
 
 func (m *MockResourceRepository) GetByID(id uuid.UUID) (bool, *model.Resource, error) {
 	args := m.Called(id)
-	return args.Bool(0), args.Get(1).(*model.Resource), args.Error(2)
+	var resource *model.Resource
+	if args.Get(1) != nil {
+		resource = args.Get(1).(*model.Resource)
+	}
+	return args.Bool(0), resource, args.Error(2)
 }
 
 func (m *MockResourceRepository) FindResources() ([]model.Resource, error) {
@@ -40,7 +44,7 @@ func (m *MockResourceRepository) FindResources() ([]model.Resource, error) {
 	return args.Get(0).([]model.Resource), args.Error(1)
 }
 
-func TestResourceService(t *testing.T) {
+func TestCreateResourceService(t *testing.T) {
 	type Given struct {
 		createResourceData dto.CreateResourceData
 		mockValue          error
@@ -146,7 +150,7 @@ func TestResourceService(t *testing.T) {
 				mockValue: errors.New("test"),
 			},
 			expected: Expected{
-				err: apperrors.NewInternalError(failures.ResourceCreationUnexpectedError),
+				err: apperrors.NewInternalError(failures.ResourceCreationError),
 			},
 		},
 	}
@@ -173,6 +177,126 @@ func TestResourceService(t *testing.T) {
 				} else {
 					require.EqualError(t, err, caseData.expected.err.Error(), "Error message does not match")
 				}
+			}
+		})
+	}
+}
+
+func TestDeleteResourceService(t *testing.T) {
+	type Given struct {
+		ID uuid.UUID
+	}
+
+	type Expected struct {
+		err error
+	}
+
+	resource := model.Resource{
+		ID:       uuid.New(),
+		Filename: "Test",
+		Format:   "pdf",
+		Link:     "https://test.image.com/image",
+	}
+
+	testCases := map[string]struct {
+		given     Given
+		expected  Expected
+		setupMock func() *MockResourceRepository
+	}{
+		"Delete success": {
+			given: Given{
+				ID: resource.ID,
+			},
+			expected: Expected{
+				err: nil,
+			},
+			setupMock: func() *MockResourceRepository {
+				mockRepository := new(MockResourceRepository)
+				mockRepository.
+					On("GetByID", mock.Anything).
+					Return(true, &resource, nil)
+
+				mockRepository.
+					On("Delete", mock.Anything).
+					Return(nil)
+
+				return mockRepository
+			},
+		},
+		"Delete nonexistent resource": {
+			given: Given{
+				ID: resource.ID,
+			},
+			expected: Expected{
+				err: nil,
+			},
+			setupMock: func() *MockResourceRepository {
+				mockRepository := new(MockResourceRepository)
+				mockRepository.
+					On("GetByID", mock.Anything).
+					Return(false, nil, nil)
+
+				mockRepository.
+					On("Delete", mock.Anything).
+					Return(nil)
+
+				return mockRepository
+			},
+		},
+		"Repository error - GetById": {
+			given: Given{
+				ID: resource.ID,
+			},
+			expected: Expected{
+				err: apperrors.NewInternalError(failures.ResourceGetError),
+			},
+			setupMock: func() *MockResourceRepository {
+				mockRepository := new(MockResourceRepository)
+				mockRepository.
+					On("GetByID", mock.Anything).
+					Return(false, nil, errors.New("test_error"))
+
+				mockRepository.
+					On("Delete", mock.Anything).
+					Return(nil)
+
+				return mockRepository
+			},
+		},
+		"Repository error - Delete": {
+			given: Given{
+				ID: resource.ID,
+			},
+			expected: Expected{
+				err: apperrors.NewInternalError(failures.ResourceDeleteError),
+			},
+			setupMock: func() *MockResourceRepository {
+				mockRepository := new(MockResourceRepository)
+				mockRepository.
+					On("GetByID", mock.Anything).
+					Return(true, &resource, nil)
+
+				mockRepository.
+					On("Delete", mock.Anything).
+					Return(errors.New("test_error"))
+
+				return mockRepository
+			},
+		},
+	}
+
+	for name, caseData := range testCases {
+		t.Run(name, func(t *testing.T) {
+			mockRepository := caseData.setupMock()
+			resourceService := service.NewResourceService(mockRepository)
+
+			err := resourceService.Delete(caseData.given.ID)
+
+			if caseData.expected.err == nil {
+				require.NoError(t, err, "Expected no error but got one")
+			} else {
+				require.Error(t, err)
+				require.EqualError(t, err, caseData.expected.err.Error(), "Error message does not match")
 			}
 		})
 	}
