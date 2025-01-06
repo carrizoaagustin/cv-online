@@ -50,3 +50,13 @@ func (s *ResourceService) Delete(id uuid.UUID) error {
 
 	return nil
 }
+
+func (s *ResourceService) Find() ([]model.Resource, error) {
+	resources, err := s.resourceRepository.FindResources()
+
+	if err != nil {
+		return nil, apperrors.NewInternalError(failures.ResourceFindError)
+	}
+
+	return resources, nil
+}

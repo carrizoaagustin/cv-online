@@ -22,6 +22,17 @@ type MockResourceService struct {
 	mock.Mock
 }
 
+func (m *MockResourceService) Find() ([]model.Resource, error) {
+	args := m.Called()
+
+	var resources []model.Resource
+	if args.Get(0) != nil {
+		resources = args.Get(0).([]model.Resource)
+	}
+
+	return resources, args.Error(1)
+}
+
 func (m *MockResourceService) Delete(id uuid.UUID) error {
 	args := m.Called(id)
 

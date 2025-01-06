@@ -28,6 +28,10 @@ var (
 		Code:    "RESOURCE_GET_ERROR",
 		Message: "Unexpected error in DB.",
 	}
+	ResourceFindError = apperrors.ErrorContent{
+		Code:    "RESOURCE_FIND_ERROR",
+		Message: "Unexpected error in DB.",
+	}
 	UploadError = apperrors.ErrorContent{
 		Code:    "RESOURCE_UPLOAD_ERROR",
 		Message: "Error uploading file.",
