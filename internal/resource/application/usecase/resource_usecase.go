@@ -37,7 +37,7 @@ func (u *ResourceUseCase) createLink(baseFolder string, baseURL string, filename
 func (u *ResourceUseCase) UploadResource(input dto.UploadResourceDTO) error {
 	filename := uuid.New().String()
 	link := u.createLink(u.config.BaseFolder, u.config.BaseURL, filename)
-	_, err := u.resourceService.Create(input.ConvertToCreateResourceData(link))
+	resource, err := u.resourceService.Create(input.ConvertToCreateResourceData(link))
 
 	if err != nil {
 		return err
@@ -52,7 +52,7 @@ func (u *ResourceUseCase) UploadResource(input dto.UploadResourceDTO) error {
 
 	_, err = u.fileStorageService.UploadFile(fileInput)
 	if err != nil {
-		// TODO: Delete resource
+		_ = u.resourceService.Delete(resource.ID)
 		return apperrors.NewInternalError(failures.UploadError)
 	}
 	return nil

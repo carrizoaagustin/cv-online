@@ -16,9 +16,17 @@ var (
 		Code:    "RESOURCE_INVALID_FORMAT",
 		Message: "Invalid format. Only allow pdf, jpeg, png and gif formats",
 	}
-	ResourceCreationUnexpectedError = apperrors.ErrorContent{
-		Code:    "RESOURCE_UNEXPECTED_ERROR",
-		Message: "Unexpected error when create resource.",
+	ResourceCreationError = apperrors.ErrorContent{
+		Code:    "RESOURCE_CREATION_ERROR",
+		Message: "Unexpected error in DB.",
+	}
+	ResourceDeleteError = apperrors.ErrorContent{
+		Code:    "RESOURCE_DELETE_ERROR",
+		Message: "Unexpected error in DB.",
+	}
+	ResourceGetError = apperrors.ErrorContent{
+		Code:    "RESOURCE_GET_ERROR",
+		Message: "Unexpected error in DB.",
 	}
 	UploadError = apperrors.ErrorContent{
 		Code:    "RESOURCE_UPLOAD_ERROR",
