@@ -3,6 +3,7 @@ package controller
 import (
 	"bytes"
 	"io"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 
@@ -18,6 +19,17 @@ func NewResourceController(resourceUseCase application.ResourceUseCase) *Resourc
 	return &ResourceController{
 		resourceUseCase: resourceUseCase,
 	}
+}
+
+func (c *ResourceController) Find(ctx *gin.Context) { // coverage-ignore
+	data, err := c.resourceUseCase.Find()
+
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, data)
 }
 
 func (c *ResourceController) UploadFile(ctx *gin.Context) { // coverage-ignore

@@ -57,3 +57,13 @@ func (u *ResourceUseCase) UploadResource(input dto.UploadResourceDTO) error {
 	}
 	return nil
 }
+
+func (u *ResourceUseCase) Find() ([]dto.ResourceOutput, error) {
+	resources, err := u.resourceService.Find()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return dto.TransformToResourceOutputArray(resources), nil
+}

@@ -148,3 +148,65 @@ func TestUploadResourceUseCase(t *testing.T) {
 		})
 	}
 }
+
+func TestFindResourceUseCase(t *testing.T) {
+	type Expected struct {
+		err error
+	}
+
+	randomBytes := make([]byte, 16)
+	if _, err := rand.Read(randomBytes); err != nil {
+		t.Fatal("Invalid byte generation")
+	}
+
+	testCases := map[string]struct {
+		setupMockResourceService func() *MockResourceService
+		expected                 Expected
+	}{
+		"find success": {
+			setupMockResourceService: func() *MockResourceService {
+				mockResourceService := new(MockResourceService)
+
+				mockResourceService.
+					On("Find").
+					Return([]model.Resource{{ID: uuid.Nil, Format: "pdf", Link: "https://asas", Filename: "filename"}}, nil)
+				return mockResourceService
+			},
+			expected: Expected{
+				err: nil,
+			},
+		},
+		"error with resource service": {
+			setupMockResourceService: func() *MockResourceService {
+				mockResourceService := new(MockResourceService)
+
+				mockResourceService.
+					On("Find").
+					Return(nil, errors.New("error in resource service"))
+				return mockResourceService
+			},
+			expected: Expected{
+				err: errors.New("error in resource service"),
+			},
+		},
+	}
+
+	for name, caseData := range testCases {
+		t.Run(name, func(t *testing.T) {
+			mockResourceService := caseData.setupMockResourceService()
+			mockFileStorageService := new(MockFileStorageService)
+			cfg := config.ResourceConfig{
+				BaseFolder: "basefolder",
+				BaseURL:    "https://test.image.com",
+			}
+			resourceUseCase := usecase.NewResourceUseCase(cfg, mockFileStorageService, mockResourceService)
+
+			_, err := resourceUseCase.Find()
+			if caseData.expected.err == nil {
+				require.NoError(t, err, "Expected no error but got one")
+			} else {
+				require.EqualError(t, err, caseData.expected.err.Error(), "Error don't match")
+			}
+		})
+	}
+}
