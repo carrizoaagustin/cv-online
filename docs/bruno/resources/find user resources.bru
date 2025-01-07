@@ -5,17 +5,9 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/api/users/:userId/resources?format=[jpeg,pdf,...]
+  url: {{baseUrl}}/api/resources
   body: none
   auth: none
-}
-
-params:query {
-  format: [jpeg,pdf,...]
-}
-
-params:path {
-  userId: 
 }
 
 docs {

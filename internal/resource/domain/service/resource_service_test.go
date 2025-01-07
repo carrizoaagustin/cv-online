@@ -41,7 +41,13 @@ func (m *MockResourceRepository) GetByID(id uuid.UUID) (bool, *model.Resource, e
 
 func (m *MockResourceRepository) FindResources() ([]model.Resource, error) {
 	args := m.Called()
-	return args.Get(0).([]model.Resource), args.Error(1)
+
+	var resources []model.Resource
+	if args.Get(0) != nil {
+		resources = args.Get(0).([]model.Resource)
+	}
+
+	return resources, args.Error(1)
 }
 
 func TestCreateResourceService(t *testing.T) {
@@ -177,6 +183,65 @@ func TestCreateResourceService(t *testing.T) {
 				} else {
 					require.EqualError(t, err, caseData.expected.err.Error(), "Error message does not match")
 				}
+			}
+		})
+	}
+}
+
+func TestFindResourceService(t *testing.T) {
+	type Expected struct {
+		err error
+	}
+
+	resource := model.Resource{
+		ID:       uuid.New(),
+		Filename: "Test",
+		Format:   "pdf",
+		Link:     "https://test.image.com/image",
+	}
+
+	testCases := map[string]struct {
+		expected  Expected
+		setupMock func() *MockResourceRepository
+	}{
+		"Find success": {
+			expected: Expected{
+				err: nil,
+			},
+			setupMock: func() *MockResourceRepository {
+				mockRepository := new(MockResourceRepository)
+				mockRepository.
+					On("FindResources", mock.Anything).
+					Return([]model.Resource{resource}, nil)
+				return mockRepository
+			},
+		},
+		"Find repository error": {
+			expected: Expected{
+				err: apperrors.NewInternalError(failures.ResourceFindError),
+			},
+			setupMock: func() *MockResourceRepository {
+				mockRepository := new(MockResourceRepository)
+				mockRepository.
+					On("FindResources", mock.Anything).
+					Return(nil, errors.New("test_error"))
+				return mockRepository
+			},
+		},
+	}
+
+	for name, caseData := range testCases {
+		t.Run(name, func(t *testing.T) {
+			mockRepository := caseData.setupMock()
+			resourceService := service.NewResourceService(mockRepository)
+
+			_, err := resourceService.Find()
+
+			if caseData.expected.err == nil {
+				require.NoError(t, err, "Expected no error but got one")
+			} else {
+				require.Error(t, err)
+				require.EqualError(t, err, caseData.expected.err.Error(), "Error message does not match")
 			}
 		})
 	}

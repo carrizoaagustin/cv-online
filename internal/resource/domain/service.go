@@ -10,6 +10,7 @@ import (
 type ResourceService interface {
 	Create(resource dto.CreateResourceData) (*model.Resource, error)
 	Delete(id uuid.UUID) error
+	Find() ([]model.Resource, error)
 }
 
 type FileStorageService interface {

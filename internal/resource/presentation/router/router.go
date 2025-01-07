@@ -9,5 +9,6 @@ import (
 func RegisterRoutes(router *gin.RouterGroup, controller *controller.ResourceController) {
 	contextGroup := router.Group("/resources")
 
+	contextGroup.GET("", controller.Find)
 	contextGroup.POST("", controller.UploadFile)
 }
