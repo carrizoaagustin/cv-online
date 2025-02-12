@@ -69,7 +69,7 @@ func (o GoogleProvider) GetUserInformation(accessToken string) (*auth.UserInform
 }
 
 func (o GoogleProvider) GetAuthorizationURL() string {
-	return o.config.Endpoints.AuthorizationURL + "?scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&response_type=code&client_id=&redirect_uri=http://localhost:8000/api/resources/callback"
+	return o.config.Endpoints.AuthorizationURL + "?scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&response_type=code&client_id=240652747137-s3krn73b2qagrojnftun4cirpipr5pc2.apps.googleusercontent.com&redirect_uri=http://localhost:8000/api/resources/callback"
 }
 
 func (o GoogleProvider) RedeemToken(authorizationCode string) (string, error) {

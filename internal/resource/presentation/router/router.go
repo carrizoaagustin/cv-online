@@ -13,8 +13,9 @@ import (
 func RegisterRoutes(router *gin.RouterGroup, controller *controller.ResourceController) {
 	googleProvider := providers.NewGoogleProvider(
 		auth.OAuthConfigParams{
-
-			Scopes: nil,
+			ClientID:  "240652747137-s3krn73b2qagrojnftun4cirpipr5pc2.apps.googleusercontent.com",
+			SecretKey: "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",
+			Scopes:    nil,
 		},
 	)
 	contextGroup := router.Group("/resources")
